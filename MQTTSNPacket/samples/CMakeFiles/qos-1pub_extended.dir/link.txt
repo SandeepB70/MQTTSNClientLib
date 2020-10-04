@@ -1,0 +1,1 @@
+/usr/bin/cc   -rdynamic CMakeFiles/qos-1pub_extended.dir/qos-1pub_extended.o CMakeFiles/qos-1pub_extended.dir/transport.o  -o qos-1pub_extended -lMQTTSNPacketClient 

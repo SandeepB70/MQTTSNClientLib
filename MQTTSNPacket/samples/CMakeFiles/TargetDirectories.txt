@@ -1,0 +1,8 @@
+/tmp/MQTTSNPacket/samples/CMakeFiles/rebuild_cache.dir
+/tmp/MQTTSNPacket/samples/CMakeFiles/edit_cache.dir
+/tmp/MQTTSNPacket/samples/CMakeFiles/qos0pub_register.dir
+/tmp/MQTTSNPacket/samples/CMakeFiles/qos0pub.dir
+/tmp/MQTTSNPacket/samples/CMakeFiles/qos-1pub.dir
+/tmp/MQTTSNPacket/samples/CMakeFiles/qos1pub.dir
+/tmp/MQTTSNPacket/samples/CMakeFiles/qos-1pub_extended.dir
+/tmp/MQTTSNPacket/samples/CMakeFiles/pub0sub1.dir

@@ -1,1 +1,0 @@
-/usr/bin/cc   -rdynamic CMakeFiles/qos0pub_register.dir/qos0pub_register.o CMakeFiles/qos0pub_register.dir/transport.o  -o qos0pub_register -lMQTTSNPacketClient 

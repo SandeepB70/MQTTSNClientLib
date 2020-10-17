@@ -1,0 +1,150 @@
+//Contains a function for building the connect message and sending it out for a client.
+//Also contains a function called MQTTSNStrCreate for creating a MQTTSNString struct containing
+//the specified character string.
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+#include "MQTTSNPacket.h"
+#include "MQTTSNConnect.h"
+#include "transport.h"
+#include "Client.h"
+#include "StackTrace.h"
+#include "Connect.h"
+#include "WillTopic.h"
+#include "ErrorCodes.h"
+
+size_t MQTTSNSerialize_connectLength(MQTTSNPacket_connectData *options); //prototype for a needed function
+
+/**
+ * Creates a Connect message for a client and sends it out to the server/gateway contained within that client.
+ * @param clientPtr The client struct that will be sending out the Connect message.
+ * @param timeOut The Keep Alive timer for the duration portion of the Connect message.
+ * @param willF The value of the will flag, either a 1 or 0.
+ * @param clnSession The value of the clean session flag, either a 1 or 0.
+ * @return 
+ */
+int connect(Client *clientPtr, uint16_t timeOut, uint8_t willF, uint8_t clnSession)
+{
+    int returnCode;
+    size_t serialLength = 0;
+    size_t packetLength = 0;
+    //unsigned char buf[500];
+    //size_t buflen = sizeof(buf);
+
+    FUNC_ENTRY;
+    //Represents the data used to put together this MQTTSN message
+    MQTTSNPacket_connectData options = MQTTSNPacket_connectData_initializer;
+    options.cleansession = clnSession;
+    options.willFlag = willF;
+    options.clientID.cstring = clientPtr->clientID;
+    options.duration = timeOut;
+
+    
+    MQTTSNPacket_connectData *optionsPtr = &options;
+    //Obtain the length of the packet that will be sent.
+    packetLength = MQTTSNPacket_len(MQTTSNSerialize_connectLength(optionsPtr));
+    //Create the buffer that will hold the MQTTSN message data and be sent out.
+    unsigned char buf[packetLength];
+    size_t bufLen = sizeof(buf);
+    
+    //Create the socket for connection.
+    clientPtr->mySocket = transport_open();
+
+    if(clientPtr->mySocket < 0){
+        return Q_ERR_Socket;
+        goto exit;
+    }
+    //Establish a connection to the server using the information provided above.
+    returnCode = MQTTSNSerialize_connect(buf, bufLen, &options);
+
+    if(returnCode > 0){
+        serialLength = (size_t) returnCode;
+    }
+    else {
+        returnCode = Q_ERR_Connect;
+        goto exit;
+    }
+	
+	//Send the Connect message to the server.
+    ssize_t rc = transport_sendPacketBuffer(clientPtr->host, clientPtr->destinationPort, buf, serialLength);
+
+    if (rc != 0){
+        returnCode = Q_ERR_Socket;
+        goto exit;
+    }
+
+    //EDIT
+    //Check if the Will flag has been set to true/on for this connect message.
+    //If it is, we need to check if the server is requesting the WillTopic, otherwise something is wrong.
+    if(willF == 1)
+    {
+        //Send a return code status indicating that we need to send out a WillTopic message.
+        if(MQTTSNPacket_read(buf, bufLen, transport_getdata) == MQTTSN_WILLTOPICREQ) 
+        {
+            returnCode = Q_WTR;
+            goto exit;
+        }
+
+        else
+        {
+            returnCode = Q_ERR_WTR;
+            goto exit;
+        }
+    }//end if
+
+    //If the will flag has not been set, check for CONNACK.
+	if (MQTTSNPacket_read(buf, bufLen, transport_getdata) == MQTTSN_CONNACK)
+	{
+		
+		int connack_rc = -1;
+
+		if (MQTTSNDeserialize_connack(&connack_rc, buf, bufLen) != 1 || connack_rc != 0)
+		{
+			returnCode = Q_ERR_Deserial;
+			goto exit;
+		}
+	}
+
+	else
+	{
+		returnCode = Q_ERR_Connack;
+		goto exit;
+	}
+
+    returnCode = Q_NO_ERR;
+
+exit:
+    FUNC_EXIT_RC(returnCode);
+    return returnCode;
+
+}//End connect
+
+/**
+ * This function will be used to create an MQTTSNString, which is needed to create a WillTopic message and WillMsg,
+ * @param strContainer A pointer to a MQTTSNString struct that the data will be written to.
+ * @param string The character string that will be written into the passed MQTTSN struct.
+ * @return The error code. Either Q_NO_ERR (0), which is a success, or Q_ERR_StrCreate (13).
+ */
+int MQTTSNStrCreate(MQTTSNString *strContainer, char *string)
+{
+    int returnCode = Q_ERR_StrCreate;
+
+    FUNC_ENTRY;
+    
+    //TODO Ask Lawrence if we want to set this cstring member because the code determines its length using strlen in 
+    //MQTTSNPacket using the MQTTSNstrlen function
+    strContainer->cstring = string;
+    strContainer->lenstring.data = string;
+    //size_t strSize = sizeof(strContainer->lenstring.data);
+    //TODO Ask Lawrence if this is ok.
+    size_t strLength = strlen(strContainer->lenstring.data);
+    strContainer->lenstring.len = strLength;
+
+    returnCode = Q_NO_ERR;
+
+    FUNC_EXIT_RC(returnCode);
+    return returnCode;
+}

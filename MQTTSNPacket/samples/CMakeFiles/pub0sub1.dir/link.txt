@@ -1,1 +1,0 @@
-/usr/bin/cc   -rdynamic CMakeFiles/pub0sub1.dir/pub0sub1.o CMakeFiles/pub0sub1.dir/transport.o  -o pub0sub1 -lMQTTSNPacketClient 

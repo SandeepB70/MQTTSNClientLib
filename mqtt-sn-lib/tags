@@ -1,0 +1,226 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+FUNC_ENTRY	StackTrace.h	27;"	d
+FUNC_ENTRY	StackTrace.h	41;"	d
+FUNC_ENTRY	StackTrace.h	53;"	d
+FUNC_ENTRY_MAX	StackTrace.h	30;"	d
+FUNC_ENTRY_MAX	StackTrace.h	44;"	d
+FUNC_ENTRY_MAX	StackTrace.h	56;"	d
+FUNC_ENTRY_MED	StackTrace.h	29;"	d
+FUNC_ENTRY_MED	StackTrace.h	43;"	d
+FUNC_ENTRY_MED	StackTrace.h	55;"	d
+FUNC_ENTRY_NOLOG	StackTrace.h	28;"	d
+FUNC_ENTRY_NOLOG	StackTrace.h	42;"	d
+FUNC_ENTRY_NOLOG	StackTrace.h	54;"	d
+FUNC_EXIT	StackTrace.h	31;"	d
+FUNC_EXIT	StackTrace.h	45;"	d
+FUNC_EXIT	StackTrace.h	57;"	d
+FUNC_EXIT_MAX	StackTrace.h	34;"	d
+FUNC_EXIT_MAX	StackTrace.h	48;"	d
+FUNC_EXIT_MAX	StackTrace.h	60;"	d
+FUNC_EXIT_MAX_RC	StackTrace.h	37;"	d
+FUNC_EXIT_MAX_RC	StackTrace.h	51;"	d
+FUNC_EXIT_MAX_RC	StackTrace.h	63;"	d
+FUNC_EXIT_MED	StackTrace.h	33;"	d
+FUNC_EXIT_MED	StackTrace.h	47;"	d
+FUNC_EXIT_MED	StackTrace.h	59;"	d
+FUNC_EXIT_MED_RC	StackTrace.h	36;"	d
+FUNC_EXIT_MED_RC	StackTrace.h	50;"	d
+FUNC_EXIT_MED_RC	StackTrace.h	62;"	d
+FUNC_EXIT_NOLOG	StackTrace.h	32;"	d
+FUNC_EXIT_NOLOG	StackTrace.h	46;"	d
+FUNC_EXIT_NOLOG	StackTrace.h	58;"	d
+FUNC_EXIT_RC	StackTrace.h	35;"	d
+FUNC_EXIT_RC	StackTrace.h	49;"	d
+FUNC_EXIT_RC	StackTrace.h	61;"	d
+MAX_FUNCTION_NAME_LENGTH	StackTrace.c	33;"	d	file:
+MAX_NO_OF_LENGTH_BYTES	MQTTSNPacket.c	93;"	d	file:
+MAX_STACK_DEPTH	StackTrace.c	32;"	d	file:
+MQTTSNCONNECT_H_	MQTTSNConnect.h	18;"	d
+MQTTSNDeserialize_ack	MQTTSNDeserializePublish.c	/^int MQTTSNDeserialize_ack(unsigned char* type, unsigned short* packetid, unsigned char* buf, size_t buflen)$/;"	f
+MQTTSNDeserialize_advertise	MQTTSNSearchClient.c	/^int MQTTSNDeserialize_advertise(unsigned char* gatewayid, unsigned short* duration,	unsigned char* buf, size_t buflen)$/;"	f
+MQTTSNDeserialize_connack	MQTTSNConnectClient.c	/^int MQTTSNDeserialize_connack(int* connack_rc, unsigned char* buf, size_t buflen)$/;"	f
+MQTTSNDeserialize_connect	MQTTSNConnectServer.c	/^int MQTTSNDeserialize_connect(MQTTSNPacket_connectData* data, unsigned char* buf, size_t len)$/;"	f
+MQTTSNDeserialize_disconnect	MQTTSNConnectServer.c	/^int MQTTSNDeserialize_disconnect(int* duration, unsigned char* buf, size_t buflen)$/;"	f
+MQTTSNDeserialize_gwinfo	MQTTSNSearchClient.c	/^int MQTTSNDeserialize_gwinfo(unsigned char* gatewayid, unsigned short* gatewayaddress_len,$/;"	f
+MQTTSNDeserialize_pingreq	MQTTSNConnectServer.c	/^int MQTTSNDeserialize_pingreq(MQTTSNString* clientID, unsigned char* buf, size_t len)$/;"	f
+MQTTSNDeserialize_pingresp	MQTTSNConnectClient.c	/^int MQTTSNDeserialize_pingresp(unsigned char* buf, size_t buflen)$/;"	f
+MQTTSNDeserialize_puback	MQTTSNDeserializePublish.c	/^int MQTTSNDeserialize_puback(unsigned short* topicid, unsigned short* packetid,$/;"	f
+MQTTSNDeserialize_publish	MQTTSNDeserializePublish.c	/^int MQTTSNDeserialize_publish(unsigned char* dup, int* qos, unsigned char* retained, unsigned short* packetid, MQTTSN_topicid* topic,$/;"	f
+MQTTSNDeserialize_regack	MQTTSNDeserializePublish.c	/^int MQTTSNDeserialize_regack(unsigned short* topicid, unsigned short* packetid, unsigned char* return_code,$/;"	f
+MQTTSNDeserialize_register	MQTTSNDeserializePublish.c	/^int MQTTSNDeserialize_register(unsigned short* topicid, unsigned short* packetid, MQTTSNString* topicname,$/;"	f
+MQTTSNDeserialize_searchgw	MQTTSNSearchServer.c	/^int MQTTSNDeserialize_searchgw(unsigned char* radius, unsigned char* buf, size_t buflen)$/;"	f
+MQTTSNDeserialize_suback	MQTTSNSubscribeClient.c	/^int MQTTSNDeserialize_suback(int* qos, unsigned short* topicid, unsigned short* packetid,$/;"	f
+MQTTSNDeserialize_subscribe	MQTTSNSubscribeServer.c	/^int MQTTSNDeserialize_subscribe(unsigned char* dup, int* qos, unsigned short* packetid,$/;"	f
+MQTTSNDeserialize_unsuback	MQTTSNUnsubscribeClient.c	/^int MQTTSNDeserialize_unsuback(unsigned short* packetid, unsigned char* buf, size_t buflen)$/;"	f
+MQTTSNDeserialize_unsubscribe	MQTTSNUnsubscribeServer.c	/^int MQTTSNDeserialize_unsubscribe(unsigned short* packetid, MQTTSN_topicid* topicFilter,$/;"	f
+MQTTSNDeserialize_willmsg	MQTTSNConnectServer.c	/^int MQTTSNDeserialize_willmsg(MQTTSNString* willMsg, unsigned char* buf, size_t len)$/;"	f
+MQTTSNDeserialize_willmsg1	MQTTSNConnectServer.c	/^int MQTTSNDeserialize_willmsg1(MQTTSNString* willMsg, unsigned char* buf, size_t len, enum MQTTSN_msgTypes packet_type)$/;"	f
+MQTTSNDeserialize_willmsgreq	MQTTSNConnectClient.c	/^int MQTTSNDeserialize_willmsgreq(unsigned char* buf, size_t buflen)$/;"	f
+MQTTSNDeserialize_willmsgresp	MQTTSNConnectClient.c	/^int MQTTSNDeserialize_willmsgresp(int* resp_rc, unsigned char* buf, size_t buflen)$/;"	f
+MQTTSNDeserialize_willmsgupd	MQTTSNConnectServer.c	/^int MQTTSNDeserialize_willmsgupd(MQTTSNString* willMsg, unsigned char* buf, size_t len)$/;"	f
+MQTTSNDeserialize_willtopic	MQTTSNConnectServer.c	/^int MQTTSNDeserialize_willtopic(int *willQoS, unsigned char *willRetain, MQTTSNString* willTopic, unsigned char* buf, size_t len)$/;"	f
+MQTTSNDeserialize_willtopic1	MQTTSNConnectServer.c	/^int MQTTSNDeserialize_willtopic1(int *willQoS, unsigned char *willRetain, MQTTSNString* willTopic, unsigned char* buf, size_t len,$/;"	f
+MQTTSNDeserialize_willtopicreq	MQTTSNConnectClient.c	/^int MQTTSNDeserialize_willtopicreq(unsigned char* buf, size_t buflen)$/;"	f
+MQTTSNDeserialize_willtopicresp	MQTTSNConnectClient.c	/^int MQTTSNDeserialize_willtopicresp(int* resp_rc, unsigned char* buf, size_t buflen)$/;"	f
+MQTTSNDeserialize_willtopicupd	MQTTSNConnectServer.c	/^int MQTTSNDeserialize_willtopicupd(int *willQoS, unsigned char *willRetain, MQTTSNString* willTopic, unsigned char* buf, size_t len)$/;"	f
+MQTTSNFlags	MQTTSNPacket.h	/^} MQTTSNFlags;$/;"	t	typeref:union:__anon6
+MQTTSNLenString	MQTTSNPacket.h	/^} MQTTSNLenString;$/;"	t	typeref:struct:__anon9
+MQTTSNPACKET_BUFFER_TOO_SHORT	MQTTSNPacket.h	/^	MQTTSNPACKET_BUFFER_TOO_SHORT = -2,$/;"	e	enum:errors
+MQTTSNPACKET_H_	MQTTSNPacket.h	19;"	d
+MQTTSNPACKET_READ_COMPLETE	MQTTSNPacket.h	/^	MQTTSNPACKET_READ_COMPLETE$/;"	e	enum:errors
+MQTTSNPACKET_READ_ERROR	MQTTSNPacket.h	/^	MQTTSNPACKET_READ_ERROR = -1,$/;"	e	enum:errors
+MQTTSNPUBLISH_H_	MQTTSNPublish.h	18;"	d
+MQTTSNPacket_connectData	MQTTSNConnect.h	/^} MQTTSNPacket_connectData;$/;"	t	typeref:struct:__anon1
+MQTTSNPacket_connectData_initializer	MQTTSNConnect.h	36;"	d
+MQTTSNPacket_decode	MQTTSNPacket.c	/^int MQTTSNPacket_decode(unsigned char* buf, size_t buflen, int* value)$/;"	f
+MQTTSNPacket_encode	MQTTSNPacket.c	/^int MQTTSNPacket_encode(unsigned char* buf, size_t length)$/;"	f
+MQTTSNPacket_len	MQTTSNPacket.c	/^int MQTTSNPacket_len(size_t length)$/;"	f
+MQTTSNPacket_name	MQTTSNPacket.c	/^const char* MQTTSNPacket_name(int code)$/;"	f
+MQTTSNPacket_read	MQTTSNPacket.c	/^int MQTTSNPacket_read(unsigned char* buf, size_t buflen, int (*getfn)(unsigned char*, int))$/;"	f
+MQTTSNPacket_read_nb	MQTTSNPacket.c	/^int MQTTSNPacket_read_nb(unsigned char* buf, size_t buflen)$/;"	f
+MQTTSNSEARCH_H_	MQTTSNSearch.h	18;"	d
+MQTTSNSUBSCRIBE_H_	MQTTSNSubscribe.h	18;"	d
+MQTTSNSerialize_ack	MQTTSNSerializePublish.c	/^int MQTTSNSerialize_ack(unsigned char* buf, size_t buflen, uint16_t packet_type,$/;"	f
+MQTTSNSerialize_advertise	MQTTSNSearchServer.c	/^int MQTTSNSerialize_advertise(unsigned char* buf, size_t buflen, unsigned char gatewayid, unsigned short duration)$/;"	f
+MQTTSNSerialize_connack	MQTTSNConnectServer.c	/^int MQTTSNSerialize_connack(unsigned char* buf, size_t buflen, int connack_rc)$/;"	f
+MQTTSNSerialize_connect	MQTTSNConnectClient.c	/^int MQTTSNSerialize_connect(unsigned char* buf, size_t buflen, MQTTSNPacket_connectData* options)$/;"	f
+MQTTSNSerialize_connectLength	MQTTSNConnectClient.c	/^int MQTTSNSerialize_connectLength(MQTTSNPacket_connectData* options)$/;"	f
+MQTTSNSerialize_disconnect	MQTTSNConnectClient.c	/^int MQTTSNSerialize_disconnect(unsigned char* buf, size_t buflen, int duration)$/;"	f
+MQTTSNSerialize_disconnectLength	MQTTSNConnectClient.c	/^int MQTTSNSerialize_disconnectLength(int duration)$/;"	f
+MQTTSNSerialize_gwinfo	MQTTSNSearchServer.c	/^int MQTTSNSerialize_gwinfo(unsigned char* buf, size_t buflen, unsigned char gatewayid, unsigned short gatewayaddress_len,$/;"	f
+MQTTSNSerialize_pingreq	MQTTSNConnectClient.c	/^int MQTTSNSerialize_pingreq(unsigned char* buf, size_t buflen, MQTTSNString clientid)$/;"	f
+MQTTSNSerialize_pingresp	MQTTSNConnectServer.c	/^int MQTTSNSerialize_pingresp(unsigned char* buf, size_t buflen)$/;"	f
+MQTTSNSerialize_puback	MQTTSNSerializePublish.c	/^int MQTTSNSerialize_puback(unsigned char* buf, size_t buflen, uint16_t topicid, uint16_t packetid,$/;"	f
+MQTTSNSerialize_pubcomp	MQTTSNSerializePublish.c	/^int MQTTSNSerialize_pubcomp(unsigned char* buf, size_t buflen, uint16_t packetid)$/;"	f
+MQTTSNSerialize_publish	MQTTSNSerializePublish.c	/^int MQTTSNSerialize_publish(unsigned char* buf, size_t buflen, uint8_t dup, uint8_t qos, $/;"	f
+MQTTSNSerialize_publishLength	MQTTSNSerializePublish.c	/^size_t MQTTSNSerialize_publishLength(size_t payloadlen, MQTTSN_topicid topic, int qos)$/;"	f
+MQTTSNSerialize_pubrec	MQTTSNSerializePublish.c	/^int MQTTSNSerialize_pubrec(unsigned char* buf, size_t buflen, uint16_t packetid)$/;"	f
+MQTTSNSerialize_pubrel	MQTTSNSerializePublish.c	/^int MQTTSNSerialize_pubrel(unsigned char* buf, size_t buflen, uint16_t packetid)$/;"	f
+MQTTSNSerialize_regack	MQTTSNSerializePublish.c	/^int MQTTSNSerialize_regack(unsigned char* buf, size_t buflen, uint16_t topicid, uint16_t packetid,$/;"	f
+MQTTSNSerialize_register	MQTTSNSerializePublish.c	/^int MQTTSNSerialize_register(unsigned char* buf, size_t buflen, uint16_t topicid, uint16_t packetid,$/;"	f
+MQTTSNSerialize_registerLength	MQTTSNSerializePublish.c	/^int MQTTSNSerialize_registerLength(size_t topicnamelen)$/;"	f
+MQTTSNSerialize_searchgw	MQTTSNSearchClient.c	/^int MQTTSNSerialize_searchgw(unsigned char* buf, size_t buflen, unsigned char radius)$/;"	f
+MQTTSNSerialize_suback	MQTTSNSubscribeServer.c	/^int MQTTSNSerialize_suback(unsigned char* buf, size_t buflen, int qos, unsigned short topicid, unsigned short packetid,$/;"	f
+MQTTSNSerialize_subscribe	MQTTSNSubscribeClient.c	/^int MQTTSNSerialize_subscribe(unsigned char* buf, size_t buflen, unsigned char dup, int qos, unsigned short packetid,$/;"	f
+MQTTSNSerialize_subscribeLength	MQTTSNSubscribeClient.c	/^int MQTTSNSerialize_subscribeLength(MQTTSN_topicid* topicFilter)$/;"	f
+MQTTSNSerialize_unsuback	MQTTSNUnsubscribeServer.c	/^int MQTTSNSerialize_unsuback(unsigned char* buf, size_t buflen, unsigned short packetid)$/;"	f
+MQTTSNSerialize_unsubscribe	MQTTSNUnsubscribeClient.c	/^int MQTTSNSerialize_unsubscribe(unsigned char* buf, size_t buflen, unsigned short packetid, MQTTSN_topicid* topicFilter)$/;"	f
+MQTTSNSerialize_unsubscribeLength	MQTTSNUnsubscribeClient.c	/^int MQTTSNSerialize_unsubscribeLength(MQTTSN_topicid* topicFilter)$/;"	f
+MQTTSNSerialize_willmsg	MQTTSNConnectClient.c	/^int MQTTSNSerialize_willmsg(unsigned char* buf, size_t buflen, MQTTSNString willMsg)$/;"	f
+MQTTSNSerialize_willmsg1	MQTTSNConnectClient.c	/^int MQTTSNSerialize_willmsg1(unsigned char* buf, size_t buflen, MQTTSNString willMsg, enum MQTTSN_msgTypes packet_type)$/;"	f
+MQTTSNSerialize_willmsgreq	MQTTSNConnectServer.c	/^int MQTTSNSerialize_willmsgreq(unsigned char* buf, size_t buflen)$/;"	f
+MQTTSNSerialize_willmsgresp	MQTTSNConnectServer.c	/^int MQTTSNSerialize_willmsgresp(unsigned char* buf, size_t buflen, int resp_rc)$/;"	f
+MQTTSNSerialize_willmsgupd	MQTTSNConnectClient.c	/^int MQTTSNSerialize_willmsgupd(unsigned char* buf, size_t buflen, MQTTSNString willMsg)$/;"	f
+MQTTSNSerialize_willtopic	MQTTSNConnectClient.c	/^int MQTTSNSerialize_willtopic(unsigned char* buf, size_t buflen, int willQoS, unsigned char willRetain, MQTTSNString willTopic)$/;"	f
+MQTTSNSerialize_willtopic1	MQTTSNConnectClient.c	/^int MQTTSNSerialize_willtopic1(unsigned char* buf, size_t buflen, int willQoS, unsigned char willRetain, MQTTSNString willTopic,$/;"	f
+MQTTSNSerialize_willtopicreq	MQTTSNConnectServer.c	/^int MQTTSNSerialize_willtopicreq(unsigned char* buf, size_t buflen)$/;"	f
+MQTTSNSerialize_willtopicresp	MQTTSNConnectServer.c	/^int MQTTSNSerialize_willtopicresp(unsigned char* buf, size_t buflen, int resp_rc)$/;"	f
+MQTTSNSerialize_willtopicupd	MQTTSNConnectClient.c	/^int MQTTSNSerialize_willtopicupd(unsigned char* buf, size_t buflen, int willQoS, unsigned char willRetain, MQTTSNString willTopic)$/;"	f
+MQTTSNString	MQTTSNPacket.h	/^} MQTTSNString;$/;"	t	typeref:struct:__anon10
+MQTTSNString_initializer	MQTTSNPacket.h	123;"	d
+MQTTSNUNSUBSCRIBE_H_	MQTTSNUnsubscribe.h	18;"	d
+MQTTSN_ADVERTISE	MQTTSNPacket.h	/^	MQTTSN_ADVERTISE, MQTTSN_SEARCHGW, MQTTSN_GWINFO, MQTTSN_RESERVED1,$/;"	e	enum:MQTTSN_msgTypes
+MQTTSN_CONNACK	MQTTSNPacket.h	/^	MQTTSN_CONNECT, MQTTSN_CONNACK,$/;"	e	enum:MQTTSN_msgTypes
+MQTTSN_CONNECT	MQTTSNPacket.h	/^	MQTTSN_CONNECT, MQTTSN_CONNACK,$/;"	e	enum:MQTTSN_msgTypes
+MQTTSN_DISCONNECT	MQTTSNPacket.h	/^	MQTTSN_DISCONNECT, MQTTSN_RESERVED3, $/;"	e	enum:MQTTSN_msgTypes
+MQTTSN_ENCAPSULATED	MQTTSNPacket.h	/^	MQTTSN_ENCAPSULATED = 0xfe$/;"	e	enum:MQTTSN_msgTypes
+MQTTSN_GWINFO	MQTTSNPacket.h	/^	MQTTSN_ADVERTISE, MQTTSN_SEARCHGW, MQTTSN_GWINFO, MQTTSN_RESERVED1,$/;"	e	enum:MQTTSN_msgTypes
+MQTTSN_PINGREQ	MQTTSNPacket.h	/^	MQTTSN_PINGREQ, MQTTSN_PINGRESP,$/;"	e	enum:MQTTSN_msgTypes
+MQTTSN_PINGRESP	MQTTSNPacket.h	/^	MQTTSN_PINGREQ, MQTTSN_PINGRESP,$/;"	e	enum:MQTTSN_msgTypes
+MQTTSN_PROTOCOL_VERSION	MQTTSNPacket.h	34;"	d
+MQTTSN_PUBACK	MQTTSNPacket.h	/^	MQTTSN_PUBLISH, MQTTSN_PUBACK, MQTTSN_PUBCOMP, MQTTSN_PUBREC, MQTTSN_PUBREL, MQTTSN_RESERVED2,$/;"	e	enum:MQTTSN_msgTypes
+MQTTSN_PUBCOMP	MQTTSNPacket.h	/^	MQTTSN_PUBLISH, MQTTSN_PUBACK, MQTTSN_PUBCOMP, MQTTSN_PUBREC, MQTTSN_PUBREL, MQTTSN_RESERVED2,$/;"	e	enum:MQTTSN_msgTypes
+MQTTSN_PUBLISH	MQTTSNPacket.h	/^	MQTTSN_PUBLISH, MQTTSN_PUBACK, MQTTSN_PUBCOMP, MQTTSN_PUBREC, MQTTSN_PUBREL, MQTTSN_RESERVED2,$/;"	e	enum:MQTTSN_msgTypes
+MQTTSN_PUBREC	MQTTSNPacket.h	/^	MQTTSN_PUBLISH, MQTTSN_PUBACK, MQTTSN_PUBCOMP, MQTTSN_PUBREC, MQTTSN_PUBREL, MQTTSN_RESERVED2,$/;"	e	enum:MQTTSN_msgTypes
+MQTTSN_PUBREL	MQTTSNPacket.h	/^	MQTTSN_PUBLISH, MQTTSN_PUBACK, MQTTSN_PUBCOMP, MQTTSN_PUBREC, MQTTSN_PUBREL, MQTTSN_RESERVED2,$/;"	e	enum:MQTTSN_msgTypes
+MQTTSN_RC_ACCEPTED	MQTTSNPacket.h	/^	MQTTSN_RC_ACCEPTED,$/;"	e	enum:MQTTSN_connackCodes
+MQTTSN_RC_NOT_SUPPORTED	MQTTSNPacket.h	/^	MQTTSN_RC_NOT_SUPPORTED$/;"	e	enum:MQTTSN_connackCodes
+MQTTSN_RC_REJECTED_CONGESTED	MQTTSNPacket.h	/^	MQTTSN_RC_REJECTED_CONGESTED,$/;"	e	enum:MQTTSN_connackCodes
+MQTTSN_RC_REJECTED_INVALID_TOPIC_ID	MQTTSNPacket.h	/^	MQTTSN_RC_REJECTED_INVALID_TOPIC_ID,$/;"	e	enum:MQTTSN_connackCodes
+MQTTSN_REGACK	MQTTSNPacket.h	/^	MQTTSN_REGISTER, MQTTSN_REGACK,$/;"	e	enum:MQTTSN_msgTypes
+MQTTSN_REGISTER	MQTTSNPacket.h	/^	MQTTSN_REGISTER, MQTTSN_REGACK,$/;"	e	enum:MQTTSN_msgTypes
+MQTTSN_RESERVED1	MQTTSNPacket.h	/^	MQTTSN_ADVERTISE, MQTTSN_SEARCHGW, MQTTSN_GWINFO, MQTTSN_RESERVED1,$/;"	e	enum:MQTTSN_msgTypes
+MQTTSN_RESERVED2	MQTTSNPacket.h	/^	MQTTSN_PUBLISH, MQTTSN_PUBACK, MQTTSN_PUBCOMP, MQTTSN_PUBREC, MQTTSN_PUBREL, MQTTSN_RESERVED2,$/;"	e	enum:MQTTSN_msgTypes
+MQTTSN_RESERVED3	MQTTSNPacket.h	/^	MQTTSN_DISCONNECT, MQTTSN_RESERVED3, $/;"	e	enum:MQTTSN_msgTypes
+MQTTSN_SEARCHGW	MQTTSNPacket.h	/^	MQTTSN_ADVERTISE, MQTTSN_SEARCHGW, MQTTSN_GWINFO, MQTTSN_RESERVED1,$/;"	e	enum:MQTTSN_msgTypes
+MQTTSN_SUBACK	MQTTSNPacket.h	/^	MQTTSN_SUBSCRIBE, MQTTSN_SUBACK, MQTTSN_UNSUBSCRIBE, MQTTSN_UNSUBACK, $/;"	e	enum:MQTTSN_msgTypes
+MQTTSN_SUBSCRIBE	MQTTSNPacket.h	/^	MQTTSN_SUBSCRIBE, MQTTSN_SUBACK, MQTTSN_UNSUBSCRIBE, MQTTSN_UNSUBACK, $/;"	e	enum:MQTTSN_msgTypes
+MQTTSN_TOPIC_TYPE_NORMAL	MQTTSNPacket.h	/^	MQTTSN_TOPIC_TYPE_NORMAL, \/* topic id in publish, topic name in subscribe *\/$/;"	e	enum:__anon2
+MQTTSN_TOPIC_TYPE_PREDEFINED	MQTTSNPacket.h	/^	MQTTSN_TOPIC_TYPE_PREDEFINED,$/;"	e	enum:__anon2
+MQTTSN_TOPIC_TYPE_SHORT	MQTTSNPacket.h	/^	MQTTSN_TOPIC_TYPE_SHORT$/;"	e	enum:__anon2
+MQTTSN_UNSUBACK	MQTTSNPacket.h	/^	MQTTSN_SUBSCRIBE, MQTTSN_SUBACK, MQTTSN_UNSUBSCRIBE, MQTTSN_UNSUBACK, $/;"	e	enum:MQTTSN_msgTypes
+MQTTSN_UNSUBSCRIBE	MQTTSNPacket.h	/^	MQTTSN_SUBSCRIBE, MQTTSN_SUBACK, MQTTSN_UNSUBSCRIBE, MQTTSN_UNSUBACK, $/;"	e	enum:MQTTSN_msgTypes
+MQTTSN_WILLMSG	MQTTSNPacket.h	/^	MQTTSN_WILLTOPICREQ, MQTTSN_WILLTOPIC, MQTTSN_WILLMSGREQ, MQTTSN_WILLMSG, $/;"	e	enum:MQTTSN_msgTypes
+MQTTSN_WILLMSGREQ	MQTTSNPacket.h	/^	MQTTSN_WILLTOPICREQ, MQTTSN_WILLTOPIC, MQTTSN_WILLMSGREQ, MQTTSN_WILLMSG, $/;"	e	enum:MQTTSN_msgTypes
+MQTTSN_WILLMSGRESP	MQTTSNPacket.h	/^	MQTTSN_WILLTOPICUPD, MQTTSN_WILLTOPICRESP, MQTTSN_WILLMSGUPD, MQTTSN_WILLMSGRESP,$/;"	e	enum:MQTTSN_msgTypes
+MQTTSN_WILLMSGUPD	MQTTSNPacket.h	/^	MQTTSN_WILLTOPICUPD, MQTTSN_WILLTOPICRESP, MQTTSN_WILLMSGUPD, MQTTSN_WILLMSGRESP,$/;"	e	enum:MQTTSN_msgTypes
+MQTTSN_WILLTOPIC	MQTTSNPacket.h	/^	MQTTSN_WILLTOPICREQ, MQTTSN_WILLTOPIC, MQTTSN_WILLMSGREQ, MQTTSN_WILLMSG, $/;"	e	enum:MQTTSN_msgTypes
+MQTTSN_WILLTOPICREQ	MQTTSNPacket.h	/^	MQTTSN_WILLTOPICREQ, MQTTSN_WILLTOPIC, MQTTSN_WILLMSGREQ, MQTTSN_WILLMSG, $/;"	e	enum:MQTTSN_msgTypes
+MQTTSN_WILLTOPICRESP	MQTTSNPacket.h	/^	MQTTSN_WILLTOPICUPD, MQTTSN_WILLTOPICRESP, MQTTSN_WILLMSGUPD, MQTTSN_WILLMSGRESP,$/;"	e	enum:MQTTSN_msgTypes
+MQTTSN_WILLTOPICUPD	MQTTSNPacket.h	/^	MQTTSN_WILLTOPICUPD, MQTTSN_WILLTOPICRESP, MQTTSN_WILLMSGUPD, MQTTSN_WILLMSGRESP,$/;"	e	enum:MQTTSN_msgTypes
+MQTTSN_connackCodes	MQTTSNPacket.h	/^enum MQTTSN_connackCodes$/;"	g
+MQTTSN_msgTypes	MQTTSNPacket.h	/^enum MQTTSN_msgTypes$/;"	g
+MQTTSN_topicTypes	MQTTSNPacket.h	/^}MQTTSN_topicTypes;$/;"	t	typeref:enum:__anon2
+MQTTSN_topicid	MQTTSNPacket.h	/^} MQTTSN_topicid;$/;"	t	typeref:struct:__anon3
+MQTTSNstrlen	MQTTSNPacket.c	/^int MQTTSNstrlen(MQTTSNString MQTTSNString)$/;"	f
+QoS	MQTTSNPacket.h	/^		unsigned int QoS : 2;$/;"	m	struct:__anon6::__anon7
+QoS	MQTTSNPacket.h	/^		unsigned int QoS : 2;$/;"	m	struct:__anon6::__anon8
+STACKTRACE_H_	StackTrace.h	18;"	d
+StackTrace_dumpStack	StackTrace.c	/^void StackTrace_dumpStack(char* dest)$/;"	f
+StackTrace_entry	StackTrace.c	/^void StackTrace_entry(const char* name, int line, int trace_level)$/;"	f
+StackTrace_exit	StackTrace.c	/^void StackTrace_exit(const char* name, int line, void* rc, int trace_level)$/;"	f
+TRACE_MAX	StackTrace.h	24;"	d
+TRACE_MEDIUM	StackTrace.h	23;"	d
+TRACE_MINIMUM	StackTrace.h	22;"	d
+all	MQTTSNPacket.h	/^	unsigned char all;$/;"	m	union:__anon6
+bits	MQTTSNPacket.h	/^	} bits;$/;"	m	union:__anon6	typeref:struct:__anon6::__anon7
+bits	MQTTSNPacket.h	/^	} bits;$/;"	m	union:__anon6	typeref:struct:__anon6::__anon8
+cleanSession	MQTTSNPacket.h	/^		unsigned int cleanSession : 1;$/;"	m	struct:__anon6::__anon7
+cleanSession	MQTTSNPacket.h	/^		unsigned int cleanSession : 1;$/;"	m	struct:__anon6::__anon8
+cleansession	MQTTSNConnect.h	/^	unsigned char cleansession;$/;"	m	struct:__anon1
+clientID	MQTTSNConnect.h	/^	MQTTSNString clientID;$/;"	m	struct:__anon1
+cstring	MQTTSNPacket.h	/^	char* cstring;$/;"	m	struct:__anon10
+data	MQTTSNPacket.h	/^	char* data;$/;"	m	struct:__anon9
+data	MQTTSNPacket.h	/^	} data;$/;"	m	struct:__anon3	typeref:union:__anon3::__anon4
+dup	MQTTSNPacket.h	/^		unsigned int dup: 1;$/;"	m	struct:__anon6::__anon7
+dup	MQTTSNPacket.h	/^		unsigned int dup: 1;$/;"	m	struct:__anon6::__anon8
+duration	MQTTSNConnect.h	/^	unsigned short duration;$/;"	m	struct:__anon1
+encapsulation_packet_name	MQTTSNPacket.c	/^static const char* encapsulation_packet_name = "ENCAPSULATED";$/;"	v	file:
+errors	MQTTSNPacket.h	/^enum errors$/;"	g
+getLenStringLen	MQTTSNPacket.c	/^int getLenStringLen(char* ptr)$/;"	f
+id	MQTTSNPacket.h	/^		unsigned short id;$/;"	m	union:__anon3::__anon4
+inline	StackTrace.h	40;"	d
+len	MQTTSNPacket.h	/^			size_t len;$/;"	m	struct:__anon3::__anon4::__anon5
+len	MQTTSNPacket.h	/^	size_t len;$/;"	m	struct:__anon9
+lenstring	MQTTSNPacket.h	/^	MQTTSNLenString lenstring;$/;"	m	struct:__anon10
+line	StackTrace.c	/^	int line;$/;"	m	struct:__anon11	file:
+long_	MQTTSNPacket.h	/^		} long_;$/;"	m	union:__anon3::__anon4	typeref:struct:__anon3::__anon4::__anon5
+min	MQTTSNConnectServer.c	21;"	d	file:
+min	MQTTSNDeserializePublish.c	21;"	d	file:
+name	MQTTSNPacket.h	/^			char* name;$/;"	m	struct:__anon3::__anon4::__anon5
+name	StackTrace.c	/^	char name[MAX_FUNCTION_NAME_LENGTH];$/;"	m	struct:__anon11	file:
+packet_names	MQTTSNPacket.c	/^static const char* packet_names[] =$/;"	v	file:
+readChar	MQTTSNPacket.c	/^char readChar(unsigned char** pptr)$/;"	f
+readInt	MQTTSNPacket.c	/^int readInt(unsigned char** pptr)$/;"	f
+readMQTTSNString	MQTTSNPacket.c	/^int readMQTTSNString(MQTTSNString* MQTTSNString, unsigned char** pptr, unsigned char* enddata)$/;"	f
+retain	MQTTSNPacket.h	/^		unsigned int retain : 1;$/;"	m	struct:__anon6::__anon7
+retain	MQTTSNPacket.h	/^		unsigned int retain : 1;$/;"	m	struct:__anon6::__anon8
+short_name	MQTTSNPacket.h	/^		char short_name[2];$/;"	m	union:__anon3::__anon4
+stackEntry	StackTrace.c	/^} stackEntry;$/;"	t	typeref:struct:__anon11	file:
+struct_id	MQTTSNConnect.h	/^	char struct_id[4];$/;"	m	struct:__anon1
+struct_version	MQTTSNConnect.h	/^	int struct_version;$/;"	m	struct:__anon1
+topicIdType	MQTTSNPacket.h	/^		unsigned int topicIdType : 2;$/;"	m	struct:__anon6::__anon7
+topicIdType	MQTTSNPacket.h	/^		unsigned int topicIdType : 2;$/;"	m	struct:__anon6::__anon8
+type	MQTTSNPacket.h	/^	MQTTSN_topicTypes type;$/;"	m	struct:__anon3
+will	MQTTSNPacket.h	/^		unsigned int will : 1;$/;"	m	struct:__anon6::__anon7
+will	MQTTSNPacket.h	/^		unsigned int will : 1;$/;"	m	struct:__anon6::__anon8
+willFlag	MQTTSNConnect.h	/^	unsigned char willFlag;$/;"	m	struct:__anon1
+writeCString	MQTTSNPacket.c	/^void writeCString(unsigned char** pptr, char* string)$/;"	f
+writeChar	MQTTSNPacket.c	/^void writeChar(unsigned char** pptr, char c)$/;"	f
+writeInt	MQTTSNPacket.c	/^void writeInt(unsigned char** pptr, int anInt)$/;"	f
+writeMQTTSNString	MQTTSNPacket.c	/^void writeMQTTSNString(unsigned char** pptr, MQTTSNString MQTTSNString)$/;"	f

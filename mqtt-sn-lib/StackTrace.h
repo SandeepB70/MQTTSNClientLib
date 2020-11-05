@@ -18,7 +18,7 @@
 #define STACKTRACE_H_
 
 #include <stdio.h>
-// #define NOSTACKTRACE 1
+//#define NOSTACKTRACE 1
 #define TRACE_MINIMUM (3)
 #define TRACE_MEDIUM (2)
 #define TRACE_MAX (1)

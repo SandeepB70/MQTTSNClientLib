@@ -1,5 +1,3 @@
+//Header for disconnect.
 
-
-
-
-int disconnect(Client *clientPtr, unsigned short sleepTimer); //prototype
+int disconnect(Client_t *clientPtr, unsigned short sleepTimer); //prototype

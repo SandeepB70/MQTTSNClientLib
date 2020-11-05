@@ -1,0 +1,24 @@
+TARGETS = connect_test disconnect_test willTopic_test willMsg_test register_testV1
+
+
+GCC_FLAGS = -Wextra -Wconversion -Werror -Wall
+#GCC_FLAGS = -Werror -Wall  
+all: $(TARGETS)
+
+connect_test: *.c *.h
+	$(CC) $(GCC_FLAGS) connect_test.c -I /home/sunny/Desktop/Tardigrade/mqtt-sn-lib-1009/mqtt-sn-lib /home/sunny/Desktop/Tardigrade/MQTTSN\ ClientLib/src/Connect.c /home/sunny/Desktop/Tardigrade/mqtt-sn-lib-1009/mqtt-sn-lib/transport.c /home/sunny/Desktop/Tardigrade/mqtt-sn-lib-1009/mqtt-sn-lib/MQTTSNPacket.c /home/sunny/Desktop/Tardigrade/mqtt-sn-lib-1009/mqtt-sn-lib/MQTTSNConnectClient.c /home/sunny/Desktop/Tardigrade/mqtt-sn-lib-1009/mqtt-sn-lib/StackTrace.c -o connect_test -Os -s
+
+disconnect_test: *.c *.h
+	$(CC) $(GCC_FLAGS) disconnect_test.c -I /home/sunny/Desktop/Tardigrade/mqtt-sn-lib-1009/mqtt-sn-lib /home/sunny/Desktop/Tardigrade/MQTTSN\ ClientLib/src/Connect.c /home/sunny/Desktop/Tardigrade/MQTTSN\ ClientLib/src/Disconnect.c /home/sunny/Desktop/Tardigrade/mqtt-sn-lib-1009/mqtt-sn-lib/transport.c /home/sunny/Desktop/Tardigrade/mqtt-sn-lib-1009/mqtt-sn-lib/MQTTSNPacket.c /home/sunny/Desktop/Tardigrade/mqtt-sn-lib-1009/mqtt-sn-lib/MQTTSNConnectClient.c /home/sunny/Desktop/Tardigrade/mqtt-sn-lib-1009/mqtt-sn-lib/StackTrace.c -o disconnect_test -Os -s
+
+willTopic_test: *.c *.h
+	$(CC) $(GCC_FLAGS) willTopic_test.c -I /home/sunny/Desktop/Tardigrade/mqtt-sn-lib-1009/mqtt-sn-lib /home/sunny/Desktop/Tardigrade/MQTTSN\ ClientLib/src/Connect.c /home/sunny/Desktop/Tardigrade/MQTTSN\ ClientLib/src/WillTopic.c /home/sunny/Desktop/Tardigrade/mqtt-sn-lib-1009/mqtt-sn-lib/transport.c /home/sunny/Desktop/Tardigrade/mqtt-sn-lib-1009/mqtt-sn-lib/MQTTSNPacket.c /home/sunny/Desktop/Tardigrade/mqtt-sn-lib-1009/mqtt-sn-lib/MQTTSNConnectClient.c /home/sunny/Desktop/Tardigrade/mqtt-sn-lib-1009/mqtt-sn-lib/StackTrace.c -o willTopic_test -Os -s
+
+willMsg_test: *.c *.h
+	$(CC) $(GCC_FLAGS) willMsg_test.c -I /home/sunny/Desktop/Tardigrade/mqtt-sn-lib-1009/mqtt-sn-lib /home/sunny/Desktop/Tardigrade/MQTTSN\ ClientLib/src/Connect.c /home/sunny/Desktop/Tardigrade/MQTTSN\ ClientLib/src/WillTopic.c /home/sunny/Desktop/Tardigrade/MQTTSN\ ClientLib/src/WillMsg.c /home/sunny/Desktop/Tardigrade/mqtt-sn-lib-1009/mqtt-sn-lib/transport.c /home/sunny/Desktop/Tardigrade/mqtt-sn-lib-1009/mqtt-sn-lib/MQTTSNPacket.c /home/sunny/Desktop/Tardigrade/mqtt-sn-lib-1009/mqtt-sn-lib/MQTTSNConnectClient.c /home/sunny/Desktop/Tardigrade/mqtt-sn-lib-1009/mqtt-sn-lib/StackTrace.c -o willMsg_test -Os -s
+
+register_testV1: *.c *.h
+	$(CC) $(GCC_FLAGS) disconnect_test.c -I /home/sunny/Desktop/Tardigrade/mqtt-sn-lib-1009/mqtt-sn-lib /home/sunny/Desktop/Tardigrade/MQTTSN\ ClientLib/src/Connect.c /home/sunny/Desktop/Tardigrade/MQTTSN\ ClientLib/src/Disconnect.c /home/sunny/Desktop/Tardigrade/mqtt-sn-lib-1009/mqtt-sn-lib/transport.c /home/sunny/Desktop/Tardigrade/mqtt-sn-lib-1009/mqtt-sn-lib/MQTTSNPacket.c /home/sunny/Desktop/Tardigrade/mqtt-sn-lib-1009/mqtt-sn-lib/MQTTSNConnectClient.c /home/sunny/Desktop/Tardigrade/mqtt-sn-lib-1009/mqtt-sn-lib/StackTrace.c -o disconnect_test -Os -s
+
+clean:
+	rm -f $(TARGETS)

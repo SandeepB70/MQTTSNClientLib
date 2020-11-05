@@ -20,6 +20,8 @@
 #include <stdio.h>
 #include <stdint.h>
 
+#include "MQTTSNPacket.h"
+
 typedef struct
 {
 	/** The eyecatcher for this structure.  must be MQSC. */

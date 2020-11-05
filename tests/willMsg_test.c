@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-#include "Client.h"
+#include "Client_t.h"
 #include "MQTTSNPacket.h"
 #include "MQTTSNConnect.h"
 #include "transport.h"
@@ -12,6 +12,7 @@
 #include "WillTopic.h"
 #include "ErrorCodes.h"
 #include "WillMsg.h"
+#include "Util.h"
 
 int main(void)
 {
@@ -24,16 +25,16 @@ int main(void)
     //Represents the clean session flag of the connect message.
     uint8_t clnSession = 1;
 
-    Client testClient;
-    testClient.destinationPort = 60885;
-    testClient.host = "50.255.7.18";
+    Client_t testClient;
+    testClient.destinationPort = 10000;
+    testClient.host = "10.0.2.15";
     testClient.clientID = "SandeepTest";
 
     returnCode = connect(&testClient, keepAlive, willFlag, clnSession);
 
     switch (returnCode) {
         //We have to send a WillTopic message to the server.    
-        case Q_WTR:
+        case Q_WillTopReq:
             break;
 
         case Q_NO_ERR:
@@ -62,7 +63,7 @@ int main(void)
     }//End switch
 
     //This code gets executed if the Server has sent a WillTopicReq.
-    if(returnCode == Q_WTR){
+    if(returnCode == Q_WillTopReq){
 
         uint8_t willQoS = 0b00;
         uint8_t willRetain = 0;
@@ -88,7 +89,7 @@ int main(void)
 
         //Check the returnCode from willTopic function;
         switch (returnCode) {
-            case Q_WMR:
+            case Q_WillMsgReq:
                 //We have to send a WillMsg to the server.
                 break;
 
@@ -115,7 +116,7 @@ int main(void)
 
     }//End if(Q_WTR)
 
-    if(returnCode == Q_WMR)
+    if(returnCode == Q_WillMsgReq)
     {
         MQTTSNString message;
         //The message to be placed in the WillMsg.
@@ -160,7 +161,7 @@ int main(void)
                 break;
         }//end switch
 
-    }//End if(Q_WMR)
+    }//End if(Q_WillMsgReq)
     
 
 	transport_close();

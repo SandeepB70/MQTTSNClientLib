@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-#include "Client.h"
+#include "Client_t.h"
 #include "MQTTSNPacket.h"
 #include "MQTTSNConnect.h"
 #include "transport.h"
@@ -11,6 +11,7 @@
 #include "Disconnect.h"
 #include "WillTopic.h"
 #include "ErrorCodes.h"
+#include "Util.h"
 
 int main(void)
 {
@@ -23,7 +24,7 @@ int main(void)
     //Represents the clean session flag of the connect message.
     uint8_t clnSession = 1;
 
-    Client testClient;
+    Client_t testClient;
     testClient.destinationPort = 60885;
     //The IP address of the server/gateway we want to connect to.
     testClient.host = "50.255.7.18";
@@ -35,7 +36,7 @@ int main(void)
     //Check the value of returnCode to ensure there were no errors.
     switch (returnCode) {
         //We have to send a WillTopic message to the server.    
-        case Q_WTR:
+        case Q_WillTopReq:
             break;
 
         case Q_NO_ERR:
@@ -64,7 +65,7 @@ int main(void)
     }//End switch
 
     //This code gets executed if the Server has sent a WillTopicReq.
-    if(returnCode == Q_WTR){
+    if(returnCode == Q_WillTopReq){
 
         //Value of QoS flag.
         uint8_t willQoS = 0b00;
@@ -89,7 +90,7 @@ int main(void)
 
         //Check the returnCode from willTopic function;
         switch (returnCode) {
-            case Q_WMR:
+            case Q_WillMsgReq:
                 puts("Success!!");
                 break;
 
@@ -114,7 +115,7 @@ int main(void)
                 break;
         }//End switch
 
-    }//End if(Q_WTR)
+    }//End if(Q_WillTopReq)
 
 	transport_close();
 

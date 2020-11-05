@@ -159,7 +159,7 @@ exit:
 
 
 /**
-  * Serializes a disconnect packet into the supplied buffer, ready for writing to a socket
+  * Serializes a pingreq packet into the supplied buffer, ready for writing to a socket
   * @param buf the buffer into which the packet will be serialized
   * @param buflen the length in bytes of the supplied buffer, to avoid overruns
   * @param clientid optional string, not added to packet string == NULL
@@ -481,3 +481,40 @@ exit:
 	FUNC_EXIT_RC(rc);
 	return rc;
 }
+
+/**
+  * Deserializes the supplied (wire) buffer into disconnect data - optional duration
+  * Note that this has been added from the server code in order to deserialize the disconnect message
+  * sent back from the server as an acknowledgment for a disconnect.
+  * @param duration returned integer value of the duration field, -1 if no duration was specified
+  * @param buf the raw buffer data, of the correct length determined by the remaining length field
+  * @param len the length in bytes of the data in the supplied buffer
+  * @return error code.  1 is success, 0 is failure
+  */
+int MQTTSNDeserialize_disconnect(int* duration, unsigned char* buf, size_t buflen)
+{
+	unsigned char* curdata = buf;
+	unsigned char* enddata = NULL;
+	int rc = -1;
+	int mylen;
+
+	FUNC_ENTRY;
+	curdata += MQTTSNPacket_decode(curdata, buflen, &mylen); /* read length */
+	enddata = buf + mylen;
+	if (enddata - curdata < 1)
+		goto exit;
+
+	if (readChar(&curdata) != MQTTSN_DISCONNECT)
+		goto exit;
+
+	if (enddata - curdata == 2)
+		*duration = readInt(&curdata);
+	else if (enddata != curdata)
+		goto exit;
+
+	rc = 1;
+exit:
+	FUNC_EXIT_RC(rc);
+	return rc;
+}
+

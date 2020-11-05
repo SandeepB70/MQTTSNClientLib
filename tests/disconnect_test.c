@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 
-#include "Client.h"
+#include "Client_t.h"
 #include "MQTTSNPacket.h"
 #include "MQTTSNConnect.h"
 #include "transport.h"
@@ -15,7 +15,7 @@ int main(void)
 {
 
     int returnCode;
-    //Used for the duration flag of the Connect message
+    //Used for the duration portion of the Connect message
     uint16_t keepAlive = 15;
     //Will be used to set the duration for the disconnect message.
     uint16_t duration = 0;
@@ -24,7 +24,7 @@ int main(void)
     //Set the clean session flag for the connect message.
     uint8_t clnSession = 1;
 
-    Client testClient;
+    Client_t testClient;
     testClient.destinationPort = 60885;
     testClient.host = "50.255.7.18";
     testClient.clientID = "SandeepTest";

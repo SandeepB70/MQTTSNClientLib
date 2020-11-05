@@ -1,4 +1,4 @@
 //Header for WillMsg
 
-int WillMsg(Client *clientPtr, MQTTSNString willMsg); //prototype
+int WillMsg(Client_t *clientPtr, MQTTSNString willMsg); //prototype
 

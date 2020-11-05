@@ -21,6 +21,7 @@
 #include <stdint.h>
 #include "MQTTSNPacket.h"
 
+size_t MQTTSNSerialize_publishLength(size_t payloadlen, MQTTSN_topicid topic, int qos); //added
 int MQTTSNSerialize_publish(unsigned char* buf, size_t buflen, uint8_t dup, uint8_t qos, 
 	uint8_t retained, uint16_t packetid,
 	MQTTSN_topicid topic, unsigned char* payload, size_t payloadlen);
@@ -38,6 +39,7 @@ int MQTTSNSerialize_pubcomp(unsigned char* buf, size_t buflen, unsigned short pa
 
 int MQTTSNDeserialize_ack(unsigned char* packettype, unsigned short* packetid, unsigned char* buf, size_t buflen);
 
+size_t MQTTSNSerialize_registerLength(size_t topicnamelen);
 int MQTTSNSerialize_register(unsigned char* buf, size_t buflen, unsigned short topicid, unsigned short packetid,
 		MQTTSNString* topicname);
 int MQTTSNDeserialize_register(unsigned short* topicid, unsigned short* packetid, MQTTSNString* topicname,

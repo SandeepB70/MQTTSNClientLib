@@ -6,14 +6,13 @@
 #include <unistd.h>
 #include <stdint.h>
 
+#include "Client_t.h"
 #include "MQTTSNPacket.h"
 #include "MQTTSNConnect.h"
-#include "Client.h"
 #include "ErrorCodes.h"
 #include "WillMsg.h"
 #include "transport.h"
 #include "StackTrace.h"
-#include "WillMsg.h"
 
 /**
  * Builds and sends WillMsg message for the specified client.
@@ -22,26 +21,26 @@
  * @return An integer: Q_NO_ERR (0) indicates the WillMsg message was acknowledged by the server/gateway. 
  *          Otherwise, Q_ERR_Serial (12), Q_ERR_Socket (1), and Q_ERR_Connack (4) indicate an error occurred. 
  */ 
-int WillMsg(Client *clientPtr, MQTTSNString willMsg)
+int WillMsg(Client_t *clientPtr, MQTTSNString willMsg)
 {
     int returnCode;
-    size_t packetLength = 0;
+    size_t bufBytes = 0;
     //Represnts the length of the serialized version of the packet.
     size_t serialLength = 0;
     //Size of the actual buffer. This will be needed to send out the packet to the server.
-    size_t bufLen = 0;
+    size_t bufSize = 0;
 
     FUNC_ENTRY;
     //We add 1 to account for the 1 byte taken up by the MsgType portion.
-    packetLength = MQTTSNPacket_len(MQTTSNstrlen(willMsg) + 1);
+    bufBytes = MQTTSNPacket_len(MQTTSNstrlen(willMsg) + 1);
 
     //buffer that will be holding the packet to be sent out
-    unsigned char buf[packetLength];
+    unsigned char buf[bufBytes];
 
-    bufLen = sizeof(buf);
+    bufSize = sizeof(buf);
 
     //Serialize the message into the buffer (buf).
-    returnCode = MQTTSNSerialize_willmsg(buf, bufLen, willMsg);
+    returnCode = MQTTSNSerialize_willmsg(buf, bufSize, willMsg);
 
 
     //If 0 was not returned, the serialization of the WillMsg was successful.
@@ -64,7 +63,7 @@ int WillMsg(Client *clientPtr, MQTTSNString willMsg)
 
 
     //Check if the server successfully received the WillMsg by checking for a CONNACK message.
-    if(MQTTSNPacket_read(buf, bufLen, transport_getdata) == MQTTSN_CONNACK)
+    if(MQTTSNPacket_read(buf, bufSize, transport_getdata) == MQTTSN_CONNACK)
     {
         returnCode = Q_NO_ERR;
         goto exit;

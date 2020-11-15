@@ -18,14 +18,12 @@
 /**
  * Build and send the WillTopic message for a MQTTSN Client
  * @param clientPtr The pointer to the Client struct that should already be connected to a server/gateway.
- * @param QoS Represents the quality of service level for this Will Topic. Can be 0b00 (level 0), 0b01 (level 1), 
- *              0b10 (level 2), or 0b11 (level 3)
- * @param willRetain Represents the value of the Retain flag for whether or not the server/broker will store the topic.
+ * @param flags Represents the flags needed for the WillTopic message.
  * @param willTopic The Will Topic that will be sent to the broker/server.
- * @return An integer: Q_WillMsgReq (14) is a success. Otherwise Q_ERR_QoS (10), Q_ERR_Retain (11), Q_ERR_Serial (12), 
- * Q_ERR_Socket (1), or Q_ERR_WillMsgReq (15) is returned to indicate an error. 
+ * @return An integer: Q_WillMsgReq is a success. Otherwise Q_ERR_QoS, Q_ERR_Retain, Q_ERR_Serial, 
+ * Q_ERR_Socket, or Q_ERR_WillMsgReq is returned to indicate an error. 
  */ 
-int willTopic(Client_t *clientPtr, uint8_t willQoS, uint8_t willRetain, MQTTSNString willTopic)
+int willTopic(Client_t *clientPtr, MQTTSNFlags flags, MQTTSNString willTopic)
 {
     int returnCode;
     size_t bufBytes = 0;
@@ -53,18 +51,18 @@ int willTopic(Client_t *clientPtr, uint8_t willQoS, uint8_t willRetain, MQTTSNSt
     bufSize = sizeof(buf);
 
      //Make sure the QoS flag is valid.
-    if (willQoS > 0b11){
-        returnCode = Q_ERR_QoS;
+    if (flags.bits.QoS > 0b11){
+        returnCode = Q_ERR_Qos;
         goto exit;
     }
     //Make sure the Retain flag is valid.
-    if(willRetain > 1){
+    if(flags.bits.retain > 1){
         returnCode = Q_ERR_Retain;
         goto exit;
     }
 
     //Serialize the message into the buffer (buf).
-    returnCode = MQTTSNSerialize_willtopic(buf, bufSize, willQoS, willRetain, willTopic);
+    returnCode = MQTTSNSerialize_willtopic(buf, bufSize, flags.bits.QoS, flags.bits.retain, willTopic);
 
     //Make sure the serialization was a success and assign it to serialLength since
     //the length of the serialized packet gets returned.
@@ -84,7 +82,8 @@ int willTopic(Client_t *clientPtr, uint8_t willQoS, uint8_t willRetain, MQTTSNSt
         goto exit;
     }
 
-    /**
+
+    /**OLD CODE
      * TODO, part of asking Lawrence about an empty will topic message.
     int MQTTSNPacketType = -1;
 
@@ -92,7 +91,6 @@ int willTopic(Client_t *clientPtr, uint8_t willQoS, uint8_t willRetain, MQTTSNSt
         MQTTSNPacketType = EMPTY_WILL_TOPIC;
     }
     printf("\n%d\n", MQTTSNPacketType);
-    */
     
     //We now have to check if the server sent a WILLMSGREQ packet back.
     //If it does, we must send a WillMsg back to the server to complete the process.
@@ -106,6 +104,9 @@ int willTopic(Client_t *clientPtr, uint8_t willQoS, uint8_t willRetain, MQTTSNSt
         returnCode = Q_ERR_WillMsgReq;
         goto exit;
     }
+    */
+
+   returnCode = Q_NO_ERR;
 
 exit:
     FUNC_EXIT_RC(returnCode);

@@ -6,6 +6,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <time.h>
 
 #include "MQTTSNPacket.h"
 #include "MQTTSNConnect.h"
@@ -23,10 +24,10 @@ size_t MQTTSNSerialize_connectLength(MQTTSNPacket_connectData *options); //proto
  * @param timeOut The Keep Alive timer for the duration portion of the Connect message.
  * @param willF The value of the will flag, either a 1 or 0.
  * @param clnSession The value of the clean session flag, either a 1 or 0.
- * @return An int: Q_NO_ERR(0) indicates success of sending a message with no will flag set. Q_WillTopReq () indicates
+ * @return An int: Q_NO_ERR indicates success of sending a message with no will flag set. Q_WillTopReq indicates
  * the connect message was successfully sent and a the server/GW responded with a WillTopicReq message. Otherwise,
- * Q_ERR_Unknown (22), Q_ERR_Socket (1), Q_ERR_SocketOpen (30), Q_ERR_Connect (2), Q_ERR_WillTopReq (5), Q_ERR_MsgReturnCode (19), 
- * Q_ERR_Deserial (3), or Q_ERR_Connack (4).
+ * Q_ERR_Unknown, Q_ERR_Socket, Q_ERR_SocketOpen, Q_ERR_Connect, Q_ERR_WillTopReq, Q_ERR_MsgReturnCode, 
+ * Q_ERR_Deserial, or Q_ERR_Connack.
  */
 int connect(Client_t *clientPtr, uint16_t timeOut, uint8_t willF, uint8_t clnSession)
 {
@@ -64,8 +65,7 @@ int connect(Client_t *clientPtr, uint16_t timeOut, uint8_t willF, uint8_t clnSes
 
     if(returnCode > 0){
         serialLength = (size_t) returnCode;
-    }
-    else {
+    }  else {
         returnCode = Q_ERR_Connect;
         goto exit;
     }
@@ -77,56 +77,67 @@ int connect(Client_t *clientPtr, uint16_t timeOut, uint8_t willF, uint8_t clnSes
         returnCode = Q_ERR_Socket;
         goto exit;
     }
-
+/**
+ * OLD CODE
     //Check if the Will flag has been set to true/on for this connect message.
     //If it is, we need to check if the server is requesting the WillTopic, otherwise something is wrong.
     if(willF == 1)
     {
-        //Send a return code status indicating that we need to send out a WillTopic message.
-        if(MQTTSNPacket_read(buf, bufSize, transport_getdata) == MQTTSN_WILLTOPICREQ) 
+        int msgCheck = msgReceived(clientPtr->mySocket, timer);
+        if(msgCheck == Q_MsgPending)
         {
-            returnCode = Q_WillTopReq;
-            goto exit;
-        }
-
-        else
-        {
-            returnCode = Q_ERR_WillTopReq;
-            goto exit;
-        }
-    }//end if
-
-    //If the will flag has not been set, check for CONNACK.
-	if (MQTTSNPacket_read(buf, bufSize, transport_getdata) == MQTTSN_CONNACK)
-	{
-		//Used to hold the return Code of the CONNACK message.
-		int connack_rc = -1;
-        //Deserialize the message and check if it is successful.
-		if (MQTTSNDeserialize_connack(&connack_rc, buf, bufSize) == 1) 
-		{
-			if(connack_rc == 0)
+            if(MQTTSNPacket_read(buf, bufSize, transport_getdata) == MQTTSN_WILLTOPICREQ) 
             {
-                returnCode = Q_NO_ERR;
+                returnCode = Q_WillTopReq;
                 goto exit;
             }
             else
             {
-                returnCode = Q_ERR_MsgReturnCode;
+                returnCode = Q_ERR_WillTopReq;
                 goto exit;
             }
-		}
-        else
-        {
-            returnCode = Q_ERR_Deserial;
-			goto exit;
         }
-	}
-	else
-	{
-        puts("No connack");
-		returnCode = Q_ERR_Connack;
-		goto exit;
-	}
+
+    }//end if
+
+    int msgCheck = msgReceived(clientPtr->mySocket, timer);
+    if(msgCheck == Q_MsgPending)
+    {
+        //If the will flag has not been set, check for CONNACK.
+	    if (MQTTSNPacket_read(buf, bufSize, transport_getdata) == MQTTSN_CONNACK)
+	    {
+	    	//Used to hold the return Code of the CONNACK message.
+	    	int connack_rc = -1;
+            //Deserialize the message and check if it is successful.
+	    	if (MQTTSNDeserialize_connack(&connack_rc, buf, bufSize) == 1) 
+	    	{
+	    		if(connack_rc == 0)
+                {
+                    returnCode = Q_NO_ERR;
+                    goto exit;
+                }
+                else
+                {
+                    returnCode = Q_ERR_MsgReturnCode;
+                    goto exit;
+                }
+	    	}
+            else
+            {
+                returnCode = Q_ERR_Deserial;
+	    		goto exit;
+            }
+	    }
+	    else
+	    {
+            puts("No connack");
+	    	returnCode = Q_ERR_Connack;
+	    	goto exit;
+	    }
+    }
+*/
+
+returnCode = Q_NO_ERR;
 
 exit:
     FUNC_EXIT_RC(returnCode);

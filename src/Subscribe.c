@@ -71,7 +71,7 @@ int subscribe(Client_t *clientPtr, MQTTSN_topicid *topic, MQTTSNFlags flags, uin
         returnCode = Q_ERR_Socket;
         goto exit;
     }
-
+/**
     //Wait for a SubAck message
     if(MQTTSNPacket_read(buf, bufSize, transport_getdata) == MQTTSN_SUBACK)
     {
@@ -138,7 +138,9 @@ int subscribe(Client_t *clientPtr, MQTTSN_topicid *topic, MQTTSNFlags flags, uin
         returnCode = Q_ERR_SubAck;
         goto exit;
     }
-
+    */
+   
+   returnCode = Q_NO_ERR;
 
 exit:
     FUNC_EXIT_RC(returnCode);

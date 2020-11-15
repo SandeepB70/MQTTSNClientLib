@@ -18,10 +18,10 @@
  * Builds and sends WillMsg message for the specified client.
  * @param clientPtr The MQTTSN client who will be sending out the will message.
  * @param willMsg An MQTTSNString struct that contains the Will message from the client.
- * @return An integer: Q_NO_ERR (0) indicates the WillMsg message was acknowledged by the server/gateway. 
- *          Otherwise, Q_ERR_Serial (12), Q_ERR_Socket (1), and Q_ERR_Connack (4) indicate an error occurred. 
+ * @return An integer: Q_NO_ERR indicates the WillMsg message was acknowledged by the server/gateway. 
+ * Otherwise, Q_ERR_Serial, Q_ERR_Socket, and Q_ERR_Connack indicate an error occurred. 
  */ 
-int WillMsg(Client_t *clientPtr, MQTTSNString willMsg)
+int willMsg(Client_t *clientPtr, MQTTSNString *willMsg)
 {
     int returnCode;
     size_t bufBytes = 0;
@@ -32,7 +32,7 @@ int WillMsg(Client_t *clientPtr, MQTTSNString willMsg)
 
     FUNC_ENTRY;
     //We add 1 to account for the 1 byte taken up by the MsgType portion.
-    bufBytes = MQTTSNPacket_len(MQTTSNstrlen(willMsg) + 1);
+    bufBytes = MQTTSNPacket_len(MQTTSNstrlen(*willMsg) + 1);
 
     //buffer that will be holding the packet to be sent out
     unsigned char buf[bufBytes];
@@ -40,7 +40,7 @@ int WillMsg(Client_t *clientPtr, MQTTSNString willMsg)
     bufSize = sizeof(buf);
 
     //Serialize the message into the buffer (buf).
-    returnCode = MQTTSNSerialize_willmsg(buf, bufSize, willMsg);
+    returnCode = MQTTSNSerialize_willmsg(buf, bufSize, *willMsg);
 
 
     //If 0 was not returned, the serialization of the WillMsg was successful.
@@ -61,7 +61,8 @@ int WillMsg(Client_t *clientPtr, MQTTSNString willMsg)
         goto exit;
     }
 
-
+/**
+ * OLD CODE
     //Check if the server successfully received the WillMsg by checking for a CONNACK message.
     if(MQTTSNPacket_read(buf, bufSize, transport_getdata) == MQTTSN_CONNACK)
     {
@@ -73,7 +74,9 @@ int WillMsg(Client_t *clientPtr, MQTTSNString willMsg)
         returnCode = Q_ERR_Connack;
         goto exit;
     }
-    
+*/
+
+returnCode = Q_NO_ERR;
     
 exit:
     FUNC_EXIT_RC(returnCode);

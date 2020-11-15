@@ -11,6 +11,15 @@
 #include "StackTrace.h"
 #include "transport.h"
 
+/**
+ * Builds and sends out a PubAck message in response to a pubish message. 
+ * This is used in response to receiving a Publish message with QoS level 1.
+ * @param clientPtr The client who will be sending out the PubAck message
+ * @param topicID The topicID used in the corresponding Publish message.
+ * @param msgID The message ID used in the corresponding Publish message.
+ * @param msgReturnCode Indicates the corresponding Publish message is either accepted or rejected.
+ * @return An int: Q_NO_ERR indicates success. Otherwise, Q_ERR_Serial and Q_ERR_Socket indicate an error.
+ */ 
 int pubAck(Client_t *clientPtr, uint16_t topicID, uint16_t msgID, uint8_t msgReturnCode)
 {
     int returnCode = 0;
@@ -51,7 +60,6 @@ int pubAck(Client_t *clientPtr, uint16_t topicID, uint16_t msgID, uint8_t msgRet
         goto exit;
     }
 
-    //Not expecting any messages in response to this.
     returnCode = Q_NO_ERR;
 
 exit: 

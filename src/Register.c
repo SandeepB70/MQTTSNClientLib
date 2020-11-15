@@ -17,12 +17,11 @@
  * @param clientPtr The client that will be sending out a message.
  * @param msgID Used to identify this particular message and match it with the regack.
  * @param topicname The name of the topic the client is trying to register with the server.
- * @param regTopicID Used to store the returned topicID from the server if the TopicName is registered successfully.
- * @return An int: Q_NO_ERR (0) is a success. Otherwise, Q_ERR_Unknown (22), Q_ERR_Serial (12), Q_ERR_Socket (1), 
- * Q_ERR_Deserial (3), Q_ERR_Ack(7), Q_ERR_MsgReturnCode (19), or Q_ERR_MsgID (18) indicate an error. 
+ * @return An int: Q_NO_ERR is a success. Otherwise, Q_ERR_Unknown, Q_ERR_Serial, Q_ERR_Socket, 
+ * Q_ERR_Deserial, Q_ERR_Ack, Q_ERR_MsgReturnCode, or Q_ERR_MsgID indicate an error. 
  */
 
-int reg(Client_t *clientPtr, uint16_t msgID, MQTTSNString *topicname, uint16_t *regTopicID)
+int reg(Client_t *clientPtr, uint16_t msgID, MQTTSNString *topicname)
 {   
     int returnCode = Q_ERR_Unknown;
 
@@ -69,14 +68,15 @@ int reg(Client_t *clientPtr, uint16_t msgID, MQTTSNString *topicname, uint16_t *
         goto exit;
     }
 
+    /**
+     * OLD CODE
     //Check that a RegAck message was received and check if the return code is "accepted".
     if(MQTTSNPacket_read(buf, bufSize, transport_getdata) == MQTTSN_REGACK)
     {
         uint8_t returnCode3 = 10;
         uint16_t msgID2 = 0;
 
-        //TODO Make the program wait Twait (5 minutes recommended) if return code congested is received. 
-        //Ask Lawrence if sleep() is ok for this.
+        //TODO Use a loop to simulate waiting.
         //Deserialize the message and make sure the process was successful
         if(MQTTSNDeserialize_regack(&topicID, &msgID2, &returnCode3, buf, bufBytes) == 1)
         {
@@ -118,7 +118,9 @@ int reg(Client_t *clientPtr, uint16_t msgID, MQTTSNString *topicname, uint16_t *
         returnCode = Q_ERR_Ack;
         goto exit;
     }
-    
+    */
+
+   returnCode = Q_NO_ERR;
 
 exit:
     FUNC_EXIT_RC(returnCode);

@@ -17,10 +17,10 @@
  * @param clientPtr The client who will be sending the message
  * @param msgID The corressponding publish message ID
  * @param msgType Indicates the message type so the program knows which to construct. 
- * Can be MQTTSN_PUBREL (16), MQTTSN_PUBREC (15), or MQTTSN_PUBCOMP (14).
+ * Can be MQTTSN_PUBREL, MQTTSN_PUBREC, or MQTTSN_PUBCOMP.
  * 
- * @return An int: Q_NO_ERR(0) indicates success. Otherwise: Q_ERR_Unknown(22), Q_ERR_MsgType (20),
- *  Q_ERR_Socket (1) indicate an error.
+ * @return An int: Q_NO_ERR indicates success. Otherwise: Q_ERR_Unknown, Q_ERR_MsgType,
+ *  Q_ERR_Socket indicate an error.
  * 
  */
 int pubRecRelComp(Client_t *clientPtr, uint16_t msgID, enum MQTTSN_msgTypes msgType)
@@ -53,17 +53,15 @@ int pubRecRelComp(Client_t *clientPtr, uint16_t msgID, enum MQTTSN_msgTypes msgT
     }
 
     else{
-//Debug
-puts("PUBREL");
         returnCode = MQTTSNSerialize_pubrel(buf, bufSize, msgID);
     }
     
 
     if(returnCode > 0){
-        serialLength = (size_t) serialLength;
+        serialLength = (size_t)returnCode;
     }
 
-    ssize_t returnCode2 = transport_sendPacketBuffer(clientPtr->host, clientPtr-> destinationPort, buf, serialLength);
+    ssize_t returnCode2 = transport_sendPacketBuffer(clientPtr->host, clientPtr->destinationPort, buf, serialLength);
 
     if(returnCode2 != 0){
         returnCode = Q_ERR_Socket;

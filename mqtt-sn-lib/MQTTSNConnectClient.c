@@ -19,7 +19,7 @@
 #include "StackTrace.h"
 
 #include <string.h>
-
+#pragma GCC diagnostic ignored "-Wconversion"
 
 /**
   * Determines the length of the MQTT connect packet that would be produced using the supplied connect options.
@@ -513,6 +513,34 @@ int MQTTSNDeserialize_disconnect(int* duration, unsigned char* buf, size_t bufle
 		goto exit;
 
 	rc = 1;
+exit:
+	FUNC_EXIT_RC(rc);
+	return rc;
+}
+
+/**
+  * ADDED from ConnectServer
+  * Serializes a pingresp packet into the supplied buffer.
+  * @param buf the buffer into which the packet will be serialized
+  * @param buflen the length in bytes of the supplied buffer
+  * @return serialized length, or error if 0
+  */
+int MQTTSNSerialize_pingresp(unsigned char* buf, size_t buflen)
+{
+	int rc = 0;
+	unsigned char *ptr = buf;
+
+	FUNC_ENTRY;
+	if (buflen < 2)
+	{
+		rc = MQTTSNPACKET_BUFFER_TOO_SHORT;
+		goto exit;
+	}
+
+	ptr += MQTTSNPacket_encode(ptr, 2); /* write length */
+	writeChar(&ptr, MQTTSN_PINGRESP);
+
+	rc = ptr - buf;
 exit:
 	FUNC_EXIT_RC(rc);
 	return rc;

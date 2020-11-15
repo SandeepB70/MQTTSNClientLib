@@ -94,7 +94,8 @@ int publish(Client_t *clientPtr, MQTTSNFlags *flags, uint16_t topicID, uint16_t 
         returnCode = Q_ERR_Socket;
         goto exit;
     }
-
+/**
+ * OLD CODE
     //If this is a QoS level 2 message, the server should send a PubRec message.
     //The MsgID of the PubRec message should match that of the Publish msg.
     if(flags->bits.QoS == 0b10)
@@ -102,7 +103,12 @@ int publish(Client_t *clientPtr, MQTTSNFlags *flags, uint16_t topicID, uint16_t 
         //New buffer to hold the PubRec, PubRel, and PubComp messages
         unsigned char buf2[1600];
         size_t bufSize2 = sizeof(buf2);
+        
+        int msgCheck = msgReceived(clientPtr->mySocket, timer);
+        if(msgCheck == Q_MsgPending)
+        {
 
+        }
         if(MQTTSNPacket_read(buf2, bufSize2, transport_getdata) == MQTTSN_PUBREC)
         {
             uint8_t msgType = 0;
@@ -120,7 +126,7 @@ int publish(Client_t *clientPtr, MQTTSNFlags *flags, uint16_t topicID, uint16_t 
 
             //In response to a PUBREC, we must send out a PUBREL
             returnCode = pubRecRelComp(clientPtr, msgID, MQTTSN_PUBREL);
-
+            
             //If the message was not successfully sent.
             if(returnCode != Q_NO_ERR){
                 returnCode = Q_ERR_PubRel;
@@ -212,8 +218,8 @@ int publish(Client_t *clientPtr, MQTTSNFlags *flags, uint16_t topicID, uint16_t 
         }
         
     }//End if statement for QoS level 1
-    
-    //For QoS level 0 there is no need to check for a PubAck message from the server.
+*/
+
     returnCode = Q_NO_ERR;
 
 exit:

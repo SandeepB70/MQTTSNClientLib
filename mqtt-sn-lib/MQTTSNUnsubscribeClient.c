@@ -18,6 +18,9 @@
 #include "StackTrace.h"
 
 #include <string.h>
+#pragma GCC diagnostic ignored "-Wconversion"
+#pragma GCC diagnostic ignored "-Wsign-conversion"
+#pragma GCC diagnostic ignored "-Wsign-compare"
 
 /**
   * Determines the length of the MQTTSN subscribe packet that would be produced using the supplied parameters, 

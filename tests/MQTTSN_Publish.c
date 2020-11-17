@@ -36,9 +36,6 @@ int event_handler(Client_Event_t *event)
     bool loopFlag = true;
     int returnCode = Q_ERR_Unknown;
 
-    //Needed to increment the send_msgID values since it is a uint16_t
-    //uint8_t add1 = 1;
-
     //The maximum number of times certain message will be attempted to be retransmitted.
     uint8_t maxRetry = 3;
     //The current number of times a message has been retransmitted out.
@@ -76,7 +73,7 @@ int event_handler(Client_Event_t *event)
 while(loopFlag)
 {
     flags.all = 0;
-
+    time_t now = time(NULL);
     switch(event->eventID)
     {
         case Q_CONNECTING:
@@ -90,7 +87,7 @@ while(loopFlag)
                     puts("Client connected.");
                     retries = 0;
                     event->eventID = Q_CONNECTED;
-                    timer_PingReq = time(NULL);
+                    timer_PingReq = now;
                     break;
                 //If it is a WillTopicReq message, send a WillTopic message and 
                 //move into the Q_WILL_TOP_REQ state.
@@ -140,6 +137,7 @@ while(loopFlag)
                 event->eventID = Q_DISCONNECTED;
                 break;
             }
+            break; //End for Q_CONNECTING break
 
         case Q_CONNECTED:
             /************************************************/
@@ -162,28 +160,27 @@ while(loopFlag)
             }
         
             if(publishFlag){
-                if(time(NULL) - timer_Publish > publish_timeout){
+                if(now - timer_Publish > publish_timeout){
                     //Send Publish message at qos0
                     if(pub0) {
                         //Used to get the message id.
-                        char num[10];
+                        char data[100];
                         //The data that will be sent out in the publish message.
-                        char pub[100] = "Qos 0, msgID: ";
-                        sprintf(num, "%hu", event->send_msgID);
-                        strcat(pub, num);
-                        //unsigned char *data = (unsigned char*)pub;
+                        char pub[] = "Qos 0, msgID: ";
+                        sprintf(data, "%s %hu", pub, event->send_msgID);
+                        //strcat(pub, num);
                         flags.bits.QoS = 0b00;
                         printf("Publishing with msgID: %hu\n", event->send_msgID);
-                        returnCode = publish(event->client, &flags, event->client->pub_topicID[0], event->send_msgID, (unsigned char*)pub);
+                        returnCode = publish(event->client, &flags, event->client->pub_topicID[0], event->send_msgID, (unsigned char*)data);
                         if(returnCode != Q_NO_ERR){
-                            puts("Errror with publishing qos0");
+                            puts("Error with publishing qos0");
                             disconnect(event->client, 0);
                             event->eventID = Q_DISCONNECTED;
                             break;
                         }
                         event->send_msgID = (uint16_t)(event->send_msgID + 1);
                         //Reset the timer.
-                        timer_Publish = time(NULL);
+                        timer_Publish = now;
                         //Next published message will have qos 1.
                         pub0 = false;
                         pub1 = true;
@@ -191,18 +188,19 @@ while(loopFlag)
                     //Send Publish message at qos1
                     } else if(pub1) {
                         //Used to get the message id.
-                        char num[10];
+                        char data[100];
                         //The data that will be sent out in the publish message.
-                        char pub[100] = "Qos 1, msgID: ";
-                        sprintf(num, "%hu", event->send_msgID);
-                        strcat(pub, num);
-                        printf("%s\n", pub);
+                        char pub[] = "Qos 1, msgID: ";
+                        sprintf(data, "%s %hu", pub, event->send_msgID);
+                        //sprintf(num, "%hu", event->send_msgID);
+                        //strcat(pub, num);
+                        printf("%s\n", data);
                         //unsigned char *data = (unsigned char*)pub;
                         flags.bits.QoS = 0b01;
                         printf("Publishing with msgID: %hu\n", event->send_msgID);
-                        returnCode = publish(event->client, &flags, event->client->pub_topicID[0], event->send_msgID, (unsigned char*)pub);
+                        returnCode = publish(event->client, &flags, event->client->pub_topicID[0], event->send_msgID, (unsigned char*)data);
                         if(returnCode != Q_NO_ERR){
-                            puts("Errror with publishing qos1");
+                            puts("Error with publishing qos1");
                             disconnect(event->client, 0);
                             event->eventID = Q_DISCONNECTED;
                             break;
@@ -210,22 +208,25 @@ while(loopFlag)
                         //Next published message will have qos 2.
                         pub1 = false;
                         pub2 = true;
+                        //Set the topicID to the appropriate value.
+                        event->topicID = event->client->pub_topicID[0];
                         event->eventID = Q_PUBLISH;
                         break;
                     }
                     else if (pub2) {
                         //Used to get the message id.
-                        char num[10];
+                        char data[100];
                         //The data that will be sent out in the publish message.
-                        char pub[100] = "Qos 2, msgID: ";
-                        sprintf(num, "%hu", event->send_msgID);
-                        strcat(pub, num);
+                        char pub[] = "Qos 2, msgID: ";
+                        sprintf(data, "%s %hu", pub, event->send_msgID);
+                        //strcat(pub, num);
                         //unsigned char *data = (unsigned char*)pub;
+                        printf("%s\n", data);
                         flags.bits.QoS = 0b10;
                         printf("Publishing with msgID: %hu\n", event->send_msgID);
-                        returnCode = publish(event->client, &flags, event->client->pub_topicID[0], event->send_msgID, (unsigned char*)pub);
+                        returnCode = publish(event->client, &flags, event->client->pub_topicID[0], event->send_msgID, (unsigned char*)data);
                         if(returnCode != Q_NO_ERR){
-                            puts("Errror with publishing qos2");
+                            puts("Error with publishing qos2");
                             disconnect(event->client, 0);
                             event->eventID = Q_DISCONNECTED;
                             break;
@@ -233,13 +234,16 @@ while(loopFlag)
                         //Next published message will have qos 0.
                         pub2 = false;
                         pub0 = true;
+                        //The msgID is used to send and match appropriate pubRecRelComp messages instead of the send_msgID
+                        event->msgID = event->send_msgID;
                         event->eventID = Q_PUBLISH;
                         break;
                     }
                 }
             }//End if(publish)
             //First check if a pingreq needs to be sent.
-            if(time(NULL) - timer_PingReq > ping_req_timeout) {
+            if(now - timer_PingReq > ping_req_timeout) {
+                puts("Pinging"); //DEBUG
                 //Create an MQTTSNString containing the an empty string so the clientID is not sent over.
                 MQTTSNStrCreate(&clientString, NULL);
                 //Send the pingReq.
@@ -315,8 +319,7 @@ while(loopFlag)
                 }
                 break;
             }
-
-            break; //Last break for Q_CONNECTED
+            break; //End break for Q_CONNECTED
 
         case Q_RCV_QOS1:
             returnCode = pubAck(event->client, event->topicID, event->msgID, MQTTSN_RC_ACCEPTED);
@@ -325,7 +328,8 @@ while(loopFlag)
                 event->eventID = Q_CONNECTED;
                 break;
             }
-            break;
+            event->eventID = Q_CONNECTED;
+            break; //End break for Q_RCV_QOS1
 
         case Q_RCV_QOS2:
             returnCode = msgReceived(event->client->mySocket);
@@ -337,7 +341,7 @@ while(loopFlag)
             //Read the message and check if it is what is expected.
             returnCode = readMsg(event);
             if(returnCode != Q_PubRelRead){
-                puts("Unexpected error/message in Q_WILL_TOP_REQ");
+                puts("Unexpected error/message in Q_RCV_QOS2");
                 event->eventID = Q_CONNECTED;
                 break;
             }
@@ -347,10 +351,10 @@ while(loopFlag)
                 puts("Error with sending pubComp");
                 break;
             }
-            break;
+            break; //End break for Q_RCV_QOS2
 
         case Q_SLEEP:
-            if(time(NULL) - timer_Sleep < sleep_timeout - 5){
+            if(now - timer_Sleep < sleep_timeout - 5){
                 break;
             }
             //Send a pingReq message to wake the client from sleep.
@@ -362,7 +366,7 @@ while(loopFlag)
                 break;
             }
             event->eventID = Q_CONNECTED;
-            break;
+            break; //End break for Q_SLEEP
         
         case Q_PUBLISH:
             returnCode = msgReceived(event->client->mySocket);
@@ -370,7 +374,7 @@ while(loopFlag)
                 puts("Error: No message received for publish qos.");
                 event->eventID = Q_CONNECTED;
                 //Reset the timer.
-                timer_Publish = time(NULL);
+                timer_Publish = now;
                 break;
             }
             returnCode = readMsg(event);
@@ -378,7 +382,7 @@ while(loopFlag)
                 event->send_msgID = (uint16_t)(event->send_msgID + 1);
                 puts("PubAck received.");
                 //Reset the timer.
-                timer_Publish = time(NULL);
+                timer_Publish = now;
                 event->eventID = Q_CONNECTED;
                 break;
             } else if (returnCode == Q_PubRecRead){
@@ -387,7 +391,7 @@ while(loopFlag)
                 if(returnCode != Q_NO_ERR){
                     puts("Error: Failed to send PubRel");
                     //Reset the timer.
-                    timer_Publish = time(NULL);
+                    timer_Publish = now;
                     break;
                 }
                 event->eventID = Q_PUB_QOS2;
@@ -395,18 +399,18 @@ while(loopFlag)
             } else {
                 puts("Error with publish qos");
                 //Reset the timer.
-                timer_Publish = time(NULL);
+                timer_Publish = now;
                 event->eventID = Q_CONNECTED;
                 break;
             }
-            break;
+            break; //End break for Q_PUBLISH
 
         case Q_PUB_QOS2:
             returnCode = msgReceived(event->client->mySocket);
             if(returnCode != Q_MsgPending) {
                 puts("Error: No message for publish qos2");
                 //Reset the timer.
-                timer_Publish = time(NULL);
+                timer_Publish = now;
                 event->eventID = Q_CONNECTED;
                 break;
             }
@@ -414,16 +418,17 @@ while(loopFlag)
             if(returnCode != Q_PubCompRead){
                 puts("Error with receiving pubComp");
                 //Reset the timer.
-                timer_Publish = time(NULL);
+                timer_Publish = now;
                 event->eventID = Q_CONNECTED;
                 break;
             }
             puts("Received PubComp");
             event->send_msgID = (uint16_t)(event->send_msgID + 1);
             //Reset the timer.
-            timer_Publish = time(NULL);
+            timer_Publish = now;
             event->eventID = Q_CONNECTED;
-            break;
+            break; //End break for Q_PUB_QOS2
+
         //Should transition to this state after receiving WillTopicReq message when Connecting.
         case Q_WILL_TOP_REQ:
             returnCode = msgReceived(event->client->mySocket);
@@ -463,6 +468,7 @@ while(loopFlag)
                 event->eventID = Q_DISCONNECTED;
                 break;
             }
+            break; //End break for Q_WILL_TOP_REQ
 
         case Q_WILL_MSG_REQ:
             returnCode = msgReceived(event->client->mySocket);
@@ -478,7 +484,7 @@ while(loopFlag)
                 //WillMsg has been acknowledged so client is now connected.
                 event->eventID = Q_CONNECTED;
                 //Start the PingReq timer
-                timer_PingReq = time(NULL);
+                timer_PingReq = now;
                 break;
             } else {
                 puts("No message received.");
@@ -486,6 +492,7 @@ while(loopFlag)
                 event->eventID = Q_DISCONNECTED;
                 break;
             }
+            break; //End break for Q_WILL_MSG_REQ
 
         case Q_WILL_MSG_UPD:
             returnCode = msgReceived(event->client->mySocket);
@@ -506,7 +513,7 @@ while(loopFlag)
                 break;
             }
             event->eventID = Q_CONNECTED;
-            break;
+            break; //End break for Q_WILL_MSG_UPD
 
         case Q_WILL_TOP_UPD:
             returnCode = msgReceived(event->client->mySocket);
@@ -526,7 +533,7 @@ while(loopFlag)
                 event->eventID = Q_CONNECTED;
             }
             event->eventID = Q_CONNECTED;
-            break;
+            break; //End break for Q_WILL_TOP_UPD
 
         case Q_REGISTERING:
             returnCode = msgReceived(event->client->mySocket);
@@ -550,7 +557,7 @@ while(loopFlag)
             //Allow the client to start sending publish messages
             publishFlag = true;
             event->send_msgID = (uint16_t)(event->send_msgID + 1);
-            break;
+            break; //End break for Q_REGISTERING
 
         case Q_SUBSCRIBING:
             returnCode = msgReceived(event->client->mySocket);
@@ -570,7 +577,7 @@ while(loopFlag)
                 event->eventID = Q_CONNECTED;
             }
             event->eventID = Q_CONNECTED;
-            break;
+            break; //End break for Q_SUBSCRIBING
 
         case Q_DISCONNECTING:
             returnCode = msgReceived(event->client->mySocket);
@@ -592,12 +599,12 @@ while(loopFlag)
             }
             returnCode = Q_NO_ERR;
             event->eventID = Q_DISCONNECTED;
-            break;
+            break; //End break for Q_DISCONNECTING
 
         case Q_DISCONNECTED:
             transport_close();
             loopFlag = false;
-            break;
+            break; //End break for Q_DISCONNECTED
 
         case Q_CLIENT_PING:
             returnCode = msgReceived(event->client->mySocket);
@@ -624,7 +631,7 @@ while(loopFlag)
                 } else {
                     puts("Max ping retries reached.");
                     //disconnect(event->client, 0);
-                    timer_PingReq = time(NULL);
+                    timer_PingReq = now;
                     event->eventID = Q_CONNECTED;
                     //returnCode = Q_ERR_NoPingResp;
                     break;
@@ -640,8 +647,9 @@ while(loopFlag)
             }
             //Reset the number of retries and timer.
             retries = 0;
-            timer_PingReq = time(NULL);
-            break;
+            timer_PingReq = now;
+            event->eventID = Q_CONNECTED;
+            break; //End break for Q_CLIENT_PING
         
         case Q_SERVER_PING:
             //Need to send out a PingResp
@@ -653,7 +661,7 @@ while(loopFlag)
                 break;
             }
             event->eventID = Q_CONNECTED;
-            break;
+            break; //End break for Q_SERVER_PING
             
         case Q_UNSUBSCRIBE:
             returnCode = msgReceived(event->client->mySocket);
@@ -670,7 +678,7 @@ while(loopFlag)
                 break;
             }
             event->eventID = Q_CONNECTED;
-            break;
+            break; //End break for Q_UNSUBSCRIBE
     }//End switch
 
 }// End while loop
@@ -710,7 +718,7 @@ int main(void)
     event.eventID = Q_CONNECTING;
     event.send_msgID = 1;
 
-    printf("Client Socket: %d\n", event.client->mySocket);
+    //printf("Client Socket: %d\n", event.client->mySocket); //DEBUG
 
     returnCode = event_handler(&event);
     returnCodeHandler(returnCode);

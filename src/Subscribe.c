@@ -17,10 +17,10 @@
  * @param topic The topic the client will be subscribing to.
  * @param flags A struct that will contain the appropriate values for the dup, qos, and topicIDType flags.
  * @param msgID The message ID used to identify this particular message for the SubAck message.
- * @return An int: Q_NO_ERR(0) indicates success and Q_WildCard() indicates a success and that the server
+ * @return An int: Q_NO_ERR indicates success and Q_WildCard indicates a success and that the server
  * will be sending a Register message since the client subscribed to a topic using a wildcard character. Otherwise,
- * Q_ERR_Unknown(22), Q_ERR_Socket(1), Q_ERR_WrongMsgID(18), Q_ERR_QoS(10), Q_ERR_MsgReturnCode(19), 
- * Q_ERR_Deserial(3), Q_ERR_SubAck(23) indicate an error. 
+ * Q_ERR_Unknown, Q_ERR_Socket, Q_ERR_WrongMsgID, Q_ERR_QoS, Q_ERR_MsgReturnCode, 
+ * Q_ERR_Deserial, Q_ERR_SubAck indicate an error. 
  */ 
 int subscribe(Client_t *clientPtr, MQTTSN_topicid *topic, MQTTSNFlags flags, uint16_t msgID)
 {
@@ -52,7 +52,7 @@ int subscribe(Client_t *clientPtr, MQTTSN_topicid *topic, MQTTSNFlags flags, uin
     }
 
     if(flags.bits.QoS > 0b10){
-        returnCode = Q_ERR_QoS;
+        returnCode = Q_ERR_Qos;
         goto exit;
     }
 

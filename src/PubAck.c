@@ -25,7 +25,7 @@ int pubAck(Client_t *clientPtr, uint16_t topicID, uint16_t msgID, uint8_t msgRet
     int returnCode = 0;
 
     //The number of bytes needed in the buffer.
-    size_t bufBytes = 6;
+    size_t bufBytes = 7;
 
     //The buffer the message will be written into.
     unsigned char buf[bufBytes];

@@ -44,16 +44,16 @@ int MQTTSNStrCreate(MQTTSNString *strContainer, char *string)
         strContainer->cstring = NULL;
         strContainer->lenstring.data = NULL;
         strContainer->lenstring.len = 0;
+    } else {
+        //TODO Ask Lawrence if we want to set this cstring member because the code determines its length using strlen in 
+        //MQTTSNPacket using the MQTTSNstrlen function
+        strContainer->cstring = string;
+        strContainer->lenstring.data = string;
+        //size_t strSize = sizeof(strContainer->lenstring.data);
+        //TODO Ask Lawrence if this is ok.
+        size_t strLength = strlen(strContainer->lenstring.data);
+        strContainer->lenstring.len = strLength;
     }
-
-    //TODO Ask Lawrence if we want to set this cstring member because the code determines its length using strlen in 
-    //MQTTSNPacket using the MQTTSNstrlen function
-    strContainer->cstring = string;
-    strContainer->lenstring.data = string;
-    //size_t strSize = sizeof(strContainer->lenstring.data);
-    //TODO Ask Lawrence if this is ok.
-    size_t strLength = strlen(strContainer->lenstring.data);
-    strContainer->lenstring.len = strLength;
 
     returnCode = Q_NO_ERR;
 
@@ -602,7 +602,7 @@ int readRecRelComp(unsigned char *buf, size_t bufSize, Client_Event_t *event, un
         goto exit;
     }
     //Check if the msgID matches with the msgID of the sent publish message.
-    if(ack_msgID != event->send_msgID){
+    if(ack_msgID != event->msgID){
         returnCode = Q_ERR_MsgID;
         goto exit;
     }

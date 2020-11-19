@@ -61,20 +61,6 @@ int willMsg(Client_t *clientPtr, MQTTSNString *willMsg)
         goto exit;
     }
 
-/**
- * OLD CODE
-    //Check if the server successfully received the WillMsg by checking for a CONNACK message.
-    if(MQTTSNPacket_read(buf, bufSize, transport_getdata) == MQTTSN_CONNACK)
-    {
-        returnCode = Q_NO_ERR;
-        goto exit;
-    }
-    else
-    {
-        returnCode = Q_ERR_Connack;
-        goto exit;
-    }
-*/
 
 returnCode = Q_NO_ERR;
     

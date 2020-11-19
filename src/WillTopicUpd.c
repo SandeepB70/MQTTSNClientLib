@@ -67,44 +67,6 @@ int WillTopicUpd(Client_t *clientPtr, const MQTTSNFlags *flags, const MQTTSNStri
         goto exit;
     }
 
-/**
- * 
- * OLD CODE
-    unsigned char buf2[1600];
-    size_t bufSize2 = sizeof(buf2);
-
-    //Client will be expecting a WillTopicResp message from the Server/GW, which will contain a 
-    //return code that indicates if the WillTopic update was successful or not.
-    if(MQTTSNPacket_read(buf2, bufSize2, transport_getdata) == MQTTSN_WILLTOPICRESP)
-    {
-
-        //Used to store the return code from the WillTopicResp message
-        int respRtrnCode = 0;
-
-        //Ensure deserialization was successful.
-        if(MQTTSNDeserialize_willtopicresp(&respRtrnCode, buf2, bufSize2) == 1)
-        {
-            //Check if the return code is "accepted"
-            if(respRtrnCode == MQTTSN_RC_ACCEPTED)
-            {
-                returnCode = Q_NO_ERR;
-                goto exit;
-            }
-            else
-            {
-                printf("%s%d\n", "Return Code: ", respRtrnCode);
-                returnCode = Q_ERR_MsgReturnCode;
-                goto exit;
-            }
-        }
-        else
-        {
-            returnCode = Q_ERR_Deserial;
-            goto exit;
-        }
-    }
-*/
-
 exit:
     FUNC_EXIT_RC(returnCode);
     return returnCode;

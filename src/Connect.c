@@ -77,65 +77,6 @@ int connect(Client_t *clientPtr, uint16_t timeOut, uint8_t willF, uint8_t clnSes
         returnCode = Q_ERR_Socket;
         goto exit;
     }
-/**
- * OLD CODE
-    //Check if the Will flag has been set to true/on for this connect message.
-    //If it is, we need to check if the server is requesting the WillTopic, otherwise something is wrong.
-    if(willF == 1)
-    {
-        int msgCheck = msgReceived(clientPtr->mySocket, timer);
-        if(msgCheck == Q_MsgPending)
-        {
-            if(MQTTSNPacket_read(buf, bufSize, transport_getdata) == MQTTSN_WILLTOPICREQ) 
-            {
-                returnCode = Q_WillTopReq;
-                goto exit;
-            }
-            else
-            {
-                returnCode = Q_ERR_WillTopReq;
-                goto exit;
-            }
-        }
-
-    }//end if
-
-    int msgCheck = msgReceived(clientPtr->mySocket, timer);
-    if(msgCheck == Q_MsgPending)
-    {
-        //If the will flag has not been set, check for CONNACK.
-	    if (MQTTSNPacket_read(buf, bufSize, transport_getdata) == MQTTSN_CONNACK)
-	    {
-	    	//Used to hold the return Code of the CONNACK message.
-	    	int connack_rc = -1;
-            //Deserialize the message and check if it is successful.
-	    	if (MQTTSNDeserialize_connack(&connack_rc, buf, bufSize) == 1) 
-	    	{
-	    		if(connack_rc == 0)
-                {
-                    returnCode = Q_NO_ERR;
-                    goto exit;
-                }
-                else
-                {
-                    returnCode = Q_ERR_MsgReturnCode;
-                    goto exit;
-                }
-	    	}
-            else
-            {
-                returnCode = Q_ERR_Deserial;
-	    		goto exit;
-            }
-	    }
-	    else
-	    {
-            puts("No connack");
-	    	returnCode = Q_ERR_Connack;
-	    	goto exit;
-	    }
-    }
-*/
 
 returnCode = Q_NO_ERR;
 

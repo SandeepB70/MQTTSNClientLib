@@ -61,33 +61,7 @@ int disconnect(Client_t *clientPtr, uint16_t sleepTimer)
         returnCode = Q_ERR_Socket;
 		goto exit;
     }
-    /**
-     * OLD CODE
-    int msgCheck = msgReceived(clientPtr->mySocket, timer);
-    if(msgCheck == Q_MsgPending)
-    {
-        //Check for DISCONNECT acknowledgement message.
-	    if (MQTTSNPacket_read(buf, bufSize, transport_getdata) == MQTTSN_DISCONNECT)
-	    {
-        
-	    	//MQTTSNDeserialize_disconnect requires an integer value for the duration field of the packet.
-	    	int duration = sleepTimer; 
-	    	int disconnect_rc = MQTTSNDeserialize_disconnect(&duration, buf, bufSize);
-
-	    	if (disconnect_rc != 1)
-	    	{
-	    		returnCode = Q_ERR_Deserial;
-	    		goto exit;
-	    	}
-	    }
-	    else
-	    {
-	    	returnCode = Q_ERR_Ack;
-	    	goto exit;
-	    }
-    }
-    */
-
+    
     returnCode = Q_NO_ERR;
 
 exit:

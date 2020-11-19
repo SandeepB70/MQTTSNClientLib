@@ -64,50 +64,6 @@ int WillMsgUpd(Client_t *clientPtr, const MQTTSNString *willMsg)
 
     returnCode = Q_NO_ERR;
 
-/**
- * 
- * OLD CODE
-    //Buffer meant to take in a message from the server/GW.
-    unsigned char buf2[1600];
-
-    //The size of the new buffer.
-    size_t bufSize2 = sizeof(buf2);
-
-    //Client should receive a WillMsgResp message containing a return code.
-    //Need to check if it was received and has a return of "accepted".
-    if(MQTTSNPacket_read(buf2, bufSize2, transport_getdata) == MQTTSN_WILLMSGRESP)
-    {
-        //Used to hold the return code contained in the WillMsgResp
-        int respRtrnCode = 0;
-
-        //Deserialize the WillMsgResp and check if it was successful.
-        if(MQTTSNDeserialize_willmsgresp(&respRtrnCode, buf2, bufSize2) == 1)
-        {
-            if (respRtrnCode == MQTTSN_RC_ACCEPTED)
-            {  
-                returnCode = Q_NO_ERR;
-                goto exit;
-            }
-            else
-            {
-                printf("%s%d\n", "Return Code: ", respRtrnCode);
-                returnCode = Q_ERR_MsgReturnCode;
-                goto exit;
-            }
-        }
-        else
-        {
-            returnCode = Q_ERR_Deserial;
-            goto exit;
-        }
-    }
-    else
-    {
-        returnCode = Q_ERR_MsgType;
-        goto exit;
-    }
-*/
-
 exit:
     FUNC_EXIT_RC(returnCode);
     return returnCode;

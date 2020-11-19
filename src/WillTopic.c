@@ -82,30 +82,6 @@ int willTopic(Client_t *clientPtr, MQTTSNFlags flags, MQTTSNString willTopic)
         goto exit;
     }
 
-
-    /**OLD CODE
-     * TODO, part of asking Lawrence about an empty will topic message.
-    int MQTTSNPacketType = -1;
-
-    if(serialLength == EMPTY_WILL_TOPIC){
-        MQTTSNPacketType = EMPTY_WILL_TOPIC;
-    }
-    printf("\n%d\n", MQTTSNPacketType);
-    
-    //We now have to check if the server sent a WILLMSGREQ packet back.
-    //If it does, we must send a WillMsg back to the server to complete the process.
-    if(MQTTSNPacket_read(buf, bufSize, transport_getdata) == MQTTSN_WILLMSGREQ)
-    {
-        returnCode = Q_WillMsgReq;
-        goto exit;
-    }
-    else
-    {
-        returnCode = Q_ERR_WillMsgReq;
-        goto exit;
-    }
-    */
-
    returnCode = Q_NO_ERR;
 
 exit:

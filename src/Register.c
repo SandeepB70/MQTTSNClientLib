@@ -67,59 +67,7 @@ int reg(Client_t *clientPtr, uint16_t msgID, MQTTSNString *topicname)
         returnCode = Q_ERR_Socket;
         goto exit;
     }
-
-    /**
-     * OLD CODE
-    //Check that a RegAck message was received and check if the return code is "accepted".
-    if(MQTTSNPacket_read(buf, bufSize, transport_getdata) == MQTTSN_REGACK)
-    {
-        uint8_t returnCode3 = 10;
-        uint16_t msgID2 = 0;
-
-        //TODO Use a loop to simulate waiting.
-        //Deserialize the message and make sure the process was successful
-        if(MQTTSNDeserialize_regack(&topicID, &msgID2, &returnCode3, buf, bufBytes) == 1)
-        {
-            //Make sure this is the corressponding RegAck for the Register message that was sent.
-            if(msgID2 == msgID)
-            {
-                //Check the return code of the message.
-                if(returnCode3 == MQTTSN_RC_ACCEPTED)
-                {
-                    //Store the registered topicID for the client to use when publishing messages.
-                    *regTopicID = topicID;
-
-                    returnCode = Q_NO_ERR;
-                    goto exit;
-                }
-                else
-                {
-                    printf("%s%d\n", "Return Code: ", returnCode3);
-                    returnCode = Q_ERR_MsgReturnCode;
-                    goto exit;
-                }
-            }
-            else
-            {
-                returnCode = Q_ERR_MsgID;
-                goto exit;
-            } 
-        }
-        else
-        {
-            returnCode = Q_ERR_Deserial;
-            goto exit;
-        }
-
-    }//end outer if
-
-    else
-    {
-        returnCode = Q_ERR_Ack;
-        goto exit;
-    }
-    */
-
+    
    returnCode = Q_NO_ERR;
 
 exit:

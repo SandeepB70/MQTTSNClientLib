@@ -1,3 +1,4 @@
+//Percentage Contribution: Sandeep Bindra (100%)
 //Build and send a PubAck message
 
 #include <stdlib.h>
@@ -18,11 +19,11 @@
  * @param topicID The topicID used in the corresponding Publish message.
  * @param msgID The message ID used in the corresponding Publish message.
  * @param msgReturnCode Indicates the corresponding Publish message is either accepted or rejected.
- * @return An int: Q_NO_ERR indicates success. Otherwise, Q_ERR_Serial and Q_ERR_Socket indicate an error.
+ * @return An int: Q_NO_ERR indicates success. Otherwise, Q_ERR_Unknown Q_ERR_Serial and Q_ERR_Socket indicate an error.
  */ 
 int pubAck(Client_t *clientPtr, uint16_t topicID, uint16_t msgID, uint8_t msgReturnCode)
 {
-    int returnCode = 0;
+    int returnCode = Q_ERR_Unknown;
 
     //The number of bytes needed in the buffer.
     size_t bufBytes = 7;
@@ -44,8 +45,7 @@ int pubAck(Client_t *clientPtr, uint16_t topicID, uint16_t msgID, uint8_t msgRet
     if(returnCode > 0){
 
         serialLength = (size_t) returnCode;
-    }
-    else{
+    } else {
         returnCode = Q_ERR_Serial;
         goto exit;
     }
@@ -55,7 +55,6 @@ int pubAck(Client_t *clientPtr, uint16_t topicID, uint16_t msgID, uint8_t msgRet
 
     //Ensure that the message was successfully sent.
     if(returnCode2 != 0){
-
         returnCode = Q_ERR_Socket;
         goto exit;
     }

@@ -1,3 +1,4 @@
+//Percentage Contribution: Sandeep Bindra (100%)
 //Build and send a PubRec, PubRel, or PubComp message
 
 #include <stdint.h>
@@ -18,7 +19,6 @@
  * @param msgID The corressponding publish message ID
  * @param msgType Indicates the message type so the program knows which to construct. 
  * Can be MQTTSN_PUBREL, MQTTSN_PUBREC, or MQTTSN_PUBCOMP.
- * 
  * @return An int: Q_NO_ERR indicates success. Otherwise: Q_ERR_Unknown, Q_ERR_MsgType,
  *  Q_ERR_Socket indicate an error.
  * 
@@ -56,11 +56,12 @@ int pubRecRelComp(Client_t *clientPtr, uint16_t msgID, enum MQTTSN_msgTypes msgT
         returnCode = MQTTSNSerialize_pubrel(buf, bufSize, msgID);
     }
     
-
+    //Check that serialization was successful
     if(returnCode > 0){
         serialLength = (size_t)returnCode;
     }
 
+    //Send the message and check if it was successfully sent
     ssize_t returnCode2 = transport_sendPacketBuffer(clientPtr->host, clientPtr->destinationPort, buf, serialLength);
 
     if(returnCode2 != 0){

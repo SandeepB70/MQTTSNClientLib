@@ -1,6 +1,9 @@
 /**
- * Serves as a utility file for any extra functions that will be needed
- * by the MQTT-SN messages.
+ * Percentage Contribution: Sandeep Bindra (100%)
+ * Contains functions that allow a client to read and process a message from the Gateway.
+ * Checking of necessary parameters, such as matching topicIDs and msgIDs, are also handled 
+ * with certain messages and an appropriate status code indicates if the parameters match or not.
+ * Also contains a function for printing error messages for certain error codes.
  */ 
 
 #include <stdint.h>
@@ -24,13 +27,14 @@
 #include "PubAck.h"
 #include "PubRecRelComp.h"
 
+//The maximum size of the buffer that is used to read in a message.
 #define Q_BUF_LEN 1600
 
 /**
  * This function will be used to create an MQTTSNString, which is needed to create a WillTopic message and WillMsg,
  * @param strContainer A pointer to a MQTTSNString struct that the data will be written to.
  * @param string The character string that will be written into the passed MQTTSNString struct.
- * @return The error code. Either Q_NO_ERR (0), which is a success, or Q_ERR_StrCreate (13).
+ * @return The error code. Either Q_NO_ERR, which is a success, or Q_ERR_StrCreate.
  */
 int MQTTSNStrCreate(MQTTSNString *strContainer, char *string)
 {
@@ -38,19 +42,15 @@ int MQTTSNStrCreate(MQTTSNString *strContainer, char *string)
 
     FUNC_ENTRY;
 
-    //We want to create an MQTTSNString struct that contains no strings. 
-    //Will need this for PingReq message when we don't want to specify a clientID.
+    //If *string is NULL, create an MQTTSNString struct that contains no strings. 
+    //Will need this for a simple PingReq message when we don't want to specify a clientID.
     if(string == NULL) {
         strContainer->cstring = NULL;
         strContainer->lenstring.data = NULL;
         strContainer->lenstring.len = 0;
     } else {
-        //TODO Ask Lawrence if we want to set this cstring member because the code determines its length using strlen in 
-        //MQTTSNPacket using the MQTTSNstrlen function
         strContainer->cstring = string;
         strContainer->lenstring.data = string;
-        //size_t strSize = sizeof(strContainer->lenstring.data);
-        //TODO Ask Lawrence if this is ok.
         size_t strLength = strlen(strContainer->lenstring.data);
         strContainer->lenstring.len = strLength;
     }
@@ -61,120 +61,13 @@ int MQTTSNStrCreate(MQTTSNString *strContainer, char *string)
     return returnCode;
 }//End MQTTSNStrCreate
 
-
 /**
- * 
- * OLD CODE
- * @param clientPtr The Client that is receiving a Publish message with a certain QoS level.
- * @param QoS The Quality of Service level for the Publish message received.
- * @param msgID The message ID of the Publish message received.
- * @param topicID Contains the message topicID
- * @return An int: Q_NO_ERR (0) indicates the procedure for the indicated QoS level was satisfied. Otherwise, Q_ERR_Unknown,
- * Q_ERR_PubAck, Q_ERR_PubComp, Q_ERR_MsgID, Q_ERR_Deserial, Q_ERR_MsgType, Q_ERR_PubRec, Q_ERR_QoS indicate an error.
- 
-int qosResponse(Client_t *clientPtr, const uint8_t QoS, const uint16_t msgID, const uint16_t topicID)
-{
-    int returnCode = Q_ERR_Unknown;
-    //Buffer needed if deserializing 
-    unsigned char buf[Q_BUF_LEN] = {0};
-    size_t bufSize = sizeof(buf);
-    //Need to check the QoS level of the message to determine how the client should respond.
-    //For QoS level 1, the client needs to send a PubAck message back to the server so it knows
-    //it got the message.
-
-    //DEBUG
-    //printf("%s%u\n", "Qos: ", QoS);
-
-    FUNC_ENTRY;
-    //If QoS level is 0, do nothing.
-    if(QoS == 0){
-        returnCode = Q_NO_ERR;
-        goto exit;
-    }
-
-    else if(QoS == 1)
-    {
-        //The accepted return code
-        uint8_t msgRtrnCode = 0;
-        if(pubAck(clientPtr, topicID, msgID, msgRtrnCode) != Q_NO_ERR)
-        {
-            returnCode = Q_ERR_PubAck;
-            goto exit;
-        }
-    }
-    //For QoS level 2, the client needs to go through a series of acknowledgement messages.
-    else if(QoS == 2)
-    {
-        //Need to send out a PubRec message first. Check to make sure it went through.
-        if(pubRecRelComp(clientPtr, msgID, MQTTSN_PUBREC) != Q_NO_ERR)
-        {
-            int msgCheck = msgReceived(clientPtr->mySocket, timer);
-            if(msgCheck == Q_MsgPending)
-            {
-                //Will have to read in a PubRel message. Check to make sure it was received.
-                if(MQTTSNPacket_read(buf, bufSize, transport_getdata) == MQTTSN_PUBREL)
-                {
-                    //Says what kind of message this is.
-                    unsigned char *msgType = NULL;
-                    //Will be used to ensure the MsgID has stayed the same 
-                    //as in the original publish message received.
-                    uint16_t msgID2 = 0;
-                    if(MQTTSNDeserialize_ack(msgType, &msgID2, buf, bufSize) == 1)
-                    {
-                        if(msgID2 == msgID)
-                        {
-                            if(pubRecRelComp(clientPtr, msgID, MQTTSN_PUBCOMP) != Q_NO_ERR)
-                            {
-                                returnCode = Q_ERR_PubComp;
-                                goto exit;
-                            }
-                        }
-                        else
-                        {
-                            returnCode = Q_ERR_MsgID;
-                            goto exit;
-                        }
-                    }
-                    else
-                    {
-                        returnCode = Q_ERR_Deserial;
-                        goto exit;
-                    }
-                }
-                else
-                {
-                    returnCode = Q_ERR_MsgType;
-                    goto exit;
-                }
-            }
-            else
-            {
-                returnCode = Q_ERR_NoPubRel;
-                goto exit;
-            }
-        }
-        else
-        {
-            returnCode = Q_ERR_PubRec;
-            goto exit;
-        }
-    }
-    //An unknown QoS level has been passed. 
-    //This should not happen, but this is for safety.
-    else
-    {
-        returnCode = Q_ERR_QoS;
-        goto exit;
-    }
-    
-exit:
-    FUNC_EXIT_RC(returnCode);
-    return returnCode;
-}//End qosResponse
-*/
-
-/**
- * Helper function to deserialize a CONNACK message and check its return type.
+ * Used to deserialize a Connack message and check its return code status.
+ * @param buf The buffer that contains the Connack message.
+ * @param bufSize The size of the buffer containing the Connack message.
+ * @return An int: Q_NO_ERR indicates a Connack message with an accepted return code. Otherwise, Q_ERR_Unknown indicates 
+ * something went wrong, Q_ERR_Deserial indicates a problem with deserialization, and Q_ERR_Rejected indicates that 
+ * //the a rejected return code was received in the Connack message.
  */ 
 int readConnack(unsigned char *buf, size_t bufSize)
 {
@@ -200,6 +93,13 @@ exit:
     return returnCode;
 }//End readConnack
 
+/**
+ * Deserializes a WillTopicResp message.
+ * @param buf The buffer that contains the WillTopicResp message.
+ * @param bufSize The size of the buffer containing the WillTopicResp message.
+ * @return An int: Q_NO_ERR indicates a return code of accepted. Otherwise, Q_ERR_Unknown indicates something went wrong, 
+ * Q_ERR_Deserial indicates an error with deserialization, and Q_ERR_Rejected indicates a return code of rejected.
+ */ 
 int readWillTopResp(unsigned char *buf, size_t bufSize)
 {
 
@@ -225,8 +125,12 @@ exit:
 }//End readWillTopResp
 
 /**
- * 
- * 
+ * Deserializes a WillMsgResp message.
+ * @param buf The buffer that contains the WillMsgResp message.
+ * @param bufSize The size of the buffer containing the WillMsgResp message.
+ * @return An int: Q_NO_ERR indicates a WillMsgResp message with an accepted return code. Otherwise, Q_ERR_Unknown indicates 
+ * something went wrong, Q_ERR_Deserial indicates an error with deserialization, and Q_ERR_Rejected indicates 
+ * a return code of rejected.
  */ 
 int readWillMsgResp(unsigned char *buf, size_t bufSize)
 {
@@ -253,11 +157,13 @@ exit:
 }//End readWillMsgResp
 
 /**
- * 
- * @param buf
- * @param bufSize
- * @param event
- * @return
+ * Deserializes an UnsubAck message.
+ * @param buf The buffer that contains the UnsubAck message.
+ * @param bufSize The size of the buffer containing the UnsubAck message.
+ * @param event Needed to check for a matching msgID between the Unsubscribe and UnsubAck message.
+ * @return An int: Q_NO_ERR indicates receipt and processing of the Unsubscribe message sent by the client. Otherwise,
+ * Q_ERR_Unknown indicates something went wrong, Q_ERR_Deserial indicates an error with deserialization, and Q_ERR_MsgID 
+ * indicates a mismatching msgID. 
  */ 
 int readUnsubAck(unsigned char *buf, size_t bufSize, Client_Event_t *event)
 {
@@ -287,11 +193,14 @@ exit:
 }//End readUnsubAck
 
 /**
- * 
- * @param buf
- * @param bufSize
- * @param event
- * @return
+ * Deserializes a SubAck message. If the return code is accepted and the topic did not include wildcard characters,
+ * the topicID is saved in the client's array of subscribed topics.
+ * @param buf The buffer that contains the SubAck message.
+ * @param bufSize The size of the buffer containing the SubAck message.
+ * @param event Needed to check for a matching msgID and Qos level between the Subscribe and SubAck message.
+ * @return An int: Q_NO_ERR indicates the client has successfully subscribed to a topic. Otherwise, Q_ERR_Unknown indicates
+ * something unknown went wrong, Q_ERR_Deserial indicates an error with deserialization, Q_ERR_Rejected indicates a return code
+ * of rejected, Q_ERR_MsgID indicates a mismatching msgID, and Q_ERR_Qos indicates a mismatching Qos level.
  */ 
 int readSubAck(unsigned char *buf, size_t bufSize, Client_Event_t *event)
 {
@@ -350,14 +259,18 @@ exit:
 }//End readSubAck
 
 
-
 /**
  * 
- * Used to read in a publish message for a subscribed client.
- * @param 
- * @param
- * @param 
- * @return An int
+ * Used to deserialize and read in a publish message for a subscribed client. If the client is subscribed to the topic, 
+ * the data within the Publish message is also displayed.
+ * @param buf The buffer that contains the Publish message.
+ * @param bufSize The size of the buffer containing the Publish message.
+ * @param event Needed to check if the client is subscribed to the topic within the Publish message and to store
+ * //the appropriate information that may be needed if the message must be acknowledged or rejected.
+ * @return An int: Q_pubQos0, Q_pubQos1, and Q_pubQos2 all the client is subscribed to this publish message and
+ * the Qos level associated with the Publish message, which dictates how the Client will respond. Otherwise, Q_ERR_Unknown indicates
+ * something unknown went wrong, Q_ERR_Deserial indicates an error with deserialization, and Q_ERR_WrongTopicID indicates the client
+ * is not subscribed to this topic.
  */ 
 int readPub(unsigned char *buf, size_t bufSize, Client_Event_t *event)
 {
@@ -394,7 +307,7 @@ int readPub(unsigned char *buf, size_t bufSize, Client_Event_t *event)
         }
     //Check if the client has any subscriptions to topics without wildcards.
     } else if(event->client->subscribe_Num > 0) {
-        //Indicates if the client is subscribed to this topic.
+        //Used to indicate if the client is subscribed to this topic.
         bool subscribed = false;
         //Check if the topicID of the message matches with a topicID the client is subscribed to.
         for(size_t index = 0; index < event->client->subscribe_Num; ++index){
@@ -429,7 +342,7 @@ int readPub(unsigned char *buf, size_t bufSize, Client_Event_t *event)
         goto exit;
     }
 
-    //Check the qos levels to return the appropriate return so the client knows how to respond.
+    //Check the qos levels to return the appropriate message to the gateway.
     if(qos == 1){
         returnCode = Q_pubQos1;
         //Will need the msgID and topicID for the pubAck message that needs to be sent.
@@ -452,11 +365,14 @@ exit:
 }//End readPub
 
 /**
- * 
- * @param buf
- * @param bufSize
- * @param event
- * @return
+ * Deserializes a Register message. 
+ * @param buf The buffer that contains the Register message.
+ * @param bufSize The size of the buffer containing the Register message.
+ * @param event Needed to determine if the client is subscribed to the topic included in the Register message
+ * and assign the TopicID and MsgID for the RegAck message that will be sent back to the Gateway. 
+ * @return An int: Q_Subscribed indicates the Client has a subscription to this topic and Q_Wildcard indicates the client will be
+ * received Publish messages with the included topicID. Otherwise, Q_ERR_Unknown indicates an unknown error, Q_ERR_Deserial 
+ * indicates an error with deserialization, and Q_RejectReg indicates the client must return a RegAck with a reject return code.
  */ 
 int readReg(unsigned char *buf, size_t bufSize, Client_Event_t *event)
 {
@@ -508,6 +424,15 @@ exit:
     return returnCode;
 }//end readReg
 
+/**
+ * Deserializes a RegAck message. Saves the topicID for the client as well, if it has an accepted return code.
+ * @param buf The buffer that contains the RegAck message.
+ * @param bufSize The size of the buffer containing the RegAck message.
+ * @return An int: Q_NO_ERR indicates successful processing of the RegAck message and a return code of accepted. 
+ * Otherwise, Q_ERR_Unknown indicates an unknown error, Q_ERR_Deserial indicates an error with deserialization, Q_ERR_Rejected
+ * indicates a return code of rejected, and Q_ERR_MsgID indicates a mismatching msgID between the Register message and this RegAck
+ * message.
+ */ 
 int readRegAck(unsigned char *buf, size_t bufSize, Client_Event_t *event)
 {
     int returnCode = Q_ERR_Unknown;
@@ -546,6 +471,16 @@ exit:
     return returnCode;
 }//end readRegAck
 
+/**
+ * Deserializes a PubAck message.
+ * @param buf The buffer that contains the PubAck message.
+ * @param bufSize The size of the buffer containing the PubAck message.
+ * @param event Needed to check if the msgID and topicID of the PubAck message match with those of the sent out Publish message.
+ * @return An int: Q_NO_ERR indicates a return code of accepted and a matching msgID and topicID. Otherwise, 
+ * Q_ERR_Unknown indicates an unknown error, Q_ERR_Deserial indicates an error with deserialization, Q_ERR_Rejected indicates a 
+ * return code of rejected, Q_ERR_MsgID indicates an error with the msgID, and Q_ERR_WrongTopicID indicates a mismatching 
+ * topicID between the PubAck and Publish message.
+ */ 
 int readPubAck(unsigned char *buf, size_t bufSize, Client_Event_t *event)
 {
     int returnCode = Q_ERR_Unknown;
@@ -585,11 +520,13 @@ exit:
 
 
 /**
- * 
- * @param buf
- * @param bufSize
- * @param msgType
- * @return 
+ * Deserializes a PubRec, PubRel, or PubComp message.
+ * @param buf The buffer that contains the message.
+ * @param bufSize The size of the buffer containing the message.
+ * @param msgType Indicates whether this is a PubRec, PubRel, or PubComp message. 
+ * @return An int: Q_NO_ERR indicates a matching msgID with the Publish message. Otherwise, Q_ERR_Unknown indicates
+ * an unknown error, Q_ERR_Deserial indicates an error with deserialization, and Q_ERR_MsgID indicates a mismatching msgID 
+ * with the Publish message.
  */ 
 int readRecRelComp(unsigned char *buf, size_t bufSize, Client_Event_t *event, unsigned char msgType)
 {
@@ -617,15 +554,16 @@ exit:
 
 /**
  * Checks if there is a message that has been sent by the server.
- * @param clientSock
- * 
+ * @param clientSock The socket that the Client is using to exchange messages with the Gateway
+ * @return An int: Q_MsgPending indicates there is a message to be read by the Client. Q_NoMsg indicates there is no message
+ * for the Client. Q_ERR_Unknown indicates an unknown error.
  */
 int msgReceived(int clientSock)
 {
     int returnCode = Q_ERR_Unknown;
 
-    //time_t secs = 1;
     //Determines how many microseconds the client will wait for a message.
+    //The value of 400000 gives the machine enough time to process an incoming message.
     suseconds_t micro_sec = 400000;
 
     FUNC_ENTRY;
@@ -636,11 +574,11 @@ int msgReceived(int clientSock)
     //if any data has been received on.
     fd_set readSet;
 
-    //Clears out the set.
+    //Clears out the set. This should be done before initializing and checking the FD.
     FD_ZERO(&readSet);
 
     //The maximum number of FDs to be read.
-    //This value must be set to the highest numbered FD plus 1.
+    //This value must be set to the highest numbered FD (in this case, the socket) plus 1.
     int maxFDP1 = clientSock + 1;
 
     //Place our socket in the FD set for reading FDs.
@@ -667,15 +605,16 @@ exit:
 
 
 /**
- * 
- * @param event
- * @return 
+ * Reads in a message to a buffer and checks its type. The appropriate function is then called to deserialize the message
+ * and carry out any other necessary actions. 
+ * @param event Needed for certain messages for things such as the topicID and msgID
+ * @return An int: Returns a status code that indicates a success or a failure. Some error codes are printed, while others
+ * will trigger to client to take a certain action or set of actions.
  */ 
 int readMsg(Client_Event_t *event)
 {
-    
+    //Used to check the error code returned when a message is deserialized and processed.
     int returnCode = Q_ERR_Unknown;
-
     //Buffer used to read in a message
     unsigned char buf[Q_BUF_LEN] = {0};
     //The size of the buffer.
@@ -705,8 +644,8 @@ int readMsg(Client_Event_t *event)
         returnCodeHandler(returnCode);
         goto exit;
     } else {
-        //Following switch statement checks the type of message, deserializes it (if necessary), 
-        //and returns the appropriate returnCode with regards to any processing of that message.
+        //Following switch statement checks the type of message, calls the appropriate function (if necessary), 
+        //and returns the appropriate status code with regards to any processing of that message.
         switch (msgType){
             case MQTTSN_CONNACK:
                 returnCode = readConnack(buf, bufSize);
@@ -868,8 +807,7 @@ exit:
 }//End readMsg
 
 /**
- * Used to read the return code and print out a response for that return code. Will be used
- * by the test cases.
+ * Used to read the return code and print out a response for that return code. Used more for debugging purposes.
  * @param returnCode The returnCode from one of the functions called in the process of building or sending
  * an MQTT-SN message.
  * @return void

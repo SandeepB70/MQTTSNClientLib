@@ -1,3 +1,4 @@
+//Percentage Contribution: Sandeep Bindra (100%)
 //Build and send the disconnect message.
 
 #include <stdio.h>
@@ -24,13 +25,11 @@ size_t MQTTSNSerialize_disconnectLength(int duration); //prototype for function 
  * @param sleepTimer The duration value for the Disconnect message, 0 indicates the client wants to disconnect, while 
  * any number greater than 0 indicates the number of seconds the client will go to sleep for.
  * @return An int: Q_NO_ERR indicates success and acknowledgement by the server/gateway of the Disconnect message.
- * Otherwise: Q_ERR_Disconnect, Q_ERR_Socket, Q_ERR_Deserial, or Q_ERR_Ack indicate an error.
+ * Otherwise: Q_ERR_Socket and Q_ERR_Serial indicate an error.
  */
 int disconnect(Client_t *clientPtr, uint16_t sleepTimer)
 {
     int returnCode;
-    
-    //time_t timer = 4;
 
     //Number of bytes needed in the buffer.
     size_t bufBytes = 0;
@@ -40,17 +39,17 @@ int disconnect(Client_t *clientPtr, uint16_t sleepTimer)
     FUNC_ENTRY;
     //Determine the number of elements that will be needed in the buffer.
     bufBytes = MQTTSNPacket_len(MQTTSNSerialize_disconnectLength(sleepTimer));
+    //buffer to hold the message
     unsigned char buf[bufBytes];
     size_t bufSize = sizeof(buf);
 
-    //Serialize the message into the buffer (buf).
+    //Serialize the message into the buffer and check if it was successful.
     returnCode = MQTTSNSerialize_disconnect(buf, bufSize, sleepTimer);
 
     if (returnCode > 0){
         serialLength = (size_t) returnCode;
-    }
-    else{
-        returnCode = Q_ERR_Disconnect;
+    } else {
+        returnCode = Q_ERR_Serial;
         goto exit;
     }
 
@@ -61,7 +60,7 @@ int disconnect(Client_t *clientPtr, uint16_t sleepTimer)
         returnCode = Q_ERR_Socket;
 		goto exit;
     }
-    
+
     returnCode = Q_NO_ERR;
 
 exit:

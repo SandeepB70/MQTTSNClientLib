@@ -1,4 +1,5 @@
 /**
+ * Percentage Contribution: Sandeep Bindra (100%)
  * Build and send the WillMsg packet for a MQTTSN Client.
  */ 
 
@@ -19,11 +20,11 @@
  * @param clientPtr The MQTTSN client who will be sending out the will message.
  * @param willMsg An MQTTSNString struct that contains the Will message from the client.
  * @return An integer: Q_NO_ERR indicates the WillMsg message was acknowledged by the server/gateway. 
- * Otherwise, Q_ERR_Serial, Q_ERR_Socket, and Q_ERR_Connack indicate an error occurred. 
+ * Otherwise, Q_ERR_Unknown, Q_ERR_Serial, or Q_ERR_Socket indicate an error occurred. 
  */ 
 int willMsg(Client_t *clientPtr, MQTTSNString *willMsg)
 {
-    int returnCode;
+    int returnCode = Q_ERR_Unknown;
     size_t bufBytes = 0;
     //Represnts the length of the serialized version of the packet.
     size_t serialLength = 0;
@@ -47,8 +48,7 @@ int willMsg(Client_t *clientPtr, MQTTSNString *willMsg)
     if(returnCode != 0 && returnCode > 0)
     {
         serialLength = (size_t) returnCode;
-    }
-    else{
+    } else {
         returnCode = Q_ERR_Serial;
         goto exit;
     }
@@ -56,11 +56,10 @@ int willMsg(Client_t *clientPtr, MQTTSNString *willMsg)
     ssize_t returnCode2 = transport_sendPacketBuffer(clientPtr->host, clientPtr->destinationPort, buf, serialLength);
 
     //Ensure transfer of the packet is successful. 
-    if(returnCode2 != 0){
+    if(returnCode2 != 0) {
         returnCode = Q_ERR_Socket;
         goto exit;
     }
-
 
 returnCode = Q_NO_ERR;
     

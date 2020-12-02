@@ -1,3 +1,4 @@
+//Percentage Contribution: Sandeep Bindra (100%)
 //Builds and sends the WillTopicUpd message.
 
 #include <stdlib.h>
@@ -11,16 +12,13 @@
 #include "Client_t.h"
 #include "StackTrace.h"
 
-
-
 /**
- * Builds and sends a WillTopicUpd message for the client and waits for the WILLTOPICRESP.
+ * Builds and sends a WillTopicUpd message for the client.
  * @param clientPtr The client sending out the WillTopicUpd message.
  * @param flags Represents the flags portion of the message. Only the QoS and retain flag are relevant for this message.
  * @param willTopic Holds the new WillTopic for the client.
- * @return An int: Q_NO_ERR (0) indicates that the message was sent successfully and accepted by the Server/GW.
- * Otherwise, Q_ERR_Unknown (22), Q_ERR_Serial (12), Q_ERR_Socket (1), Q_ERR_MsgReturnCode (19), or Q_ERR_Deserial (3) indicate
- * an error.
+ * @return An int: Q_NO_ERR indicates that the message was sent successfully and accepted by the Server/GW.
+ * Otherwise, Q_ERR_Unknown, Q_ERR_Serial, or Q_ERR_Socket indicate an error.
  */
 int WillTopicUpd(Client_t *clientPtr, const MQTTSNFlags *flags, const MQTTSNString *willTopic) 
 {
@@ -66,6 +64,8 @@ int WillTopicUpd(Client_t *clientPtr, const MQTTSNFlags *flags, const MQTTSNStri
         returnCode = Q_ERR_Socket;
         goto exit;
     }
+
+    returnCode = Q_NO_ERR;
 
 exit:
     FUNC_EXIT_RC(returnCode);

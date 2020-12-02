@@ -1,3 +1,4 @@
+//Percentage Contribution: Sandeep Bindra (100%)
 //Builds and Sends the WillMsgUpd message.
 
 #include <stdlib.h>
@@ -12,11 +13,10 @@
 #include "StackTrace.h"
 
 /**
- * Builds and Sends out a WillMsgUpd and processes the incoming WillMsgResp that should be returned from the Server/GW
+ * Builds and Sends out a WillMsgUpd
  * @param clientPtr The client that will be sending out the message.
  * @param willMsg The new WillMsg for the client.
- * @return An int: Q_NO_ERR (0) indicates success. Otherwise, Q_ERR_Unknown (22), Q_ERR_Serial (12), Q_ERR_Socket (1), 
- * Q_ERR_MsgReturnCode (19), Q_ERR_Deserial (3), Q_ERR_MsgType (20) indicate an error.
+ * @return An int: Q_NO_ERR indicates success. Otherwise, Q_ERR_Unknown, Q_ERR_Serial, or Q_ERR_Socket indicate an error.
  */
 
 int WillMsgUpd(Client_t *clientPtr, const MQTTSNString *willMsg)
@@ -47,8 +47,7 @@ int WillMsgUpd(Client_t *clientPtr, const MQTTSNString *willMsg)
     //Check if serialization was successful and assign the length to the serialLength variable
     if(returnCode > 0){
         serialLength = returnCode;
-    }
-    else{
+    } else {
         returnCode = Q_ERR_Serial;
         goto exit;
     }

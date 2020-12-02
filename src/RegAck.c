@@ -1,3 +1,4 @@
+//Percentage Contribution: Sandeep Bindra (100%)
 //Builds and Sends a RegAck message for the client
 
 
@@ -21,7 +22,7 @@
  * @param clientPtr The client who will be sending out the acknowledgment message
  * @param topicID The topicID that should have been sent by the server in its register message.
  * @param msgID The messsage ID that should have been sent by the server.
- * @return An int: Q_NO_ERR indicates success. Otherwise, Q_ERR_Serial, Q_ERR_Socket indicate errors.
+ * @return An int: Q_NO_ERR indicates success. Otherwise, Q_ERR_Serial, Q_ERR_Socket, or Q_ERR_Rejected indicate errors.
  */
 
 int regAck(Client_t *clientPtr, uint16_t topicID, uint16_t msgID, uint8_t msgReturnCode)
@@ -70,13 +71,6 @@ int regAck(Client_t *clientPtr, uint16_t topicID, uint16_t msgID, uint8_t msgRet
         goto exit;
     }
 
-
-    //TODO Ask Lawrence about this. Need to figure out a way to create a buffer large enough
-    //to hold the publish message (if it has been sent). May have to also 
-    //adjust transport_getdata() so that it receives a flag for recvfrom (MSG_PEEK) or
-    //(MSG_WAITALL). 
-   
-    //If no publish message has been received, then there are no other messages to be expected from the server.
     returnCode = Q_NO_ERR;
 
 exit:

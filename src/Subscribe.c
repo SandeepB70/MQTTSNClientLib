@@ -1,3 +1,4 @@
+//Percentage Contribution: Sandeep Bindra (30%), Amanda Lai (70%)
 //Build and Send the Subscribe message
 
 #include <stdlib.h>
@@ -19,8 +20,7 @@
  * @param msgID The message ID used to identify this particular message for the SubAck message.
  * @return An int: Q_NO_ERR indicates success and Q_WildCard indicates a success and that the server
  * will be sending a Register message since the client subscribed to a topic using a wildcard character. Otherwise,
- * Q_ERR_Unknown, Q_ERR_Socket, Q_ERR_WrongMsgID, Q_ERR_QoS, Q_ERR_MsgReturnCode, 
- * Q_ERR_Deserial, Q_ERR_SubAck indicate an error. 
+ * Q_ERR_Unknown, Q_ERR_Socket, Q_ERR_TopicIdType, or Q_ERR_QoS indicate an error. 
  */ 
 int subscribe(Client_t *clientPtr, MQTTSN_topicid *topic, MQTTSNFlags flags, uint16_t msgID)
 {
@@ -71,74 +71,6 @@ int subscribe(Client_t *clientPtr, MQTTSN_topicid *topic, MQTTSNFlags flags, uin
         returnCode = Q_ERR_Socket;
         goto exit;
     }
-/**
-    //Wait for a SubAck message
-    if(MQTTSNPacket_read(buf, bufSize, transport_getdata) == MQTTSN_SUBACK)
-    {
-        //Following variables will store the corressponding values from the deserialized SubAck message
-        int ackQos = 0;
-        uint16_t ackTopicID = 0;
-        uint16_t ackMsgID = 0;
-        uint8_t ackReturnCode = 0;
-
-        //Check if deserialization of the message was successful 
-        if(MQTTSNDeserialize_suback(&ackQos, &ackTopicID, &ackMsgID, &ackReturnCode, buf, bufSize) == 1)
-        {
-            
-            //Check if the return code is "accepted"
-            if(ackReturnCode == MQTTSN_RC_ACCEPTED)
-            {
-
-                //Check the QoS level
-                if(flags.bits.QoS == ackQos)
-                {
-                    //Check the MsgID
-                    if(ackMsgID == msgID)
-                    {
-                        //Lastly, check if the client subscribed using a wildcard in the topic name (indicated by 0x0000 for topicID)
-                        if(ackTopicID == 0)
-                        {
-                            returnCode = Q_WildCard;
-                            goto exit;
-                        }
-                        else
-                        {
-                            clientPtr->topicID = ackTopicID;
-                            returnCode = Q_NO_ERR;
-                            goto exit;
-                        }
-                    }
-                    else
-                    {
-                        returnCode = Q_ERR_MsgID;
-                        goto exit;
-                    }
-                }
-                else
-                {
-                    returnCode = Q_ERR_QoS;
-                    goto exit;
-                }
-            }
-            else
-            {
-                printf("\n%s%d\n", "RC: ", ackReturnCode);
-                returnCode = Q_ERR_MsgReturnCode;
-                goto exit;
-            }
-        }
-        else
-        {
-            returnCode = Q_ERR_Deserial;
-            goto exit;
-        }
-    }
-    else
-    {
-        returnCode = Q_ERR_SubAck;
-        goto exit;
-    }
-    */
    
    returnCode = Q_NO_ERR;
 

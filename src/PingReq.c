@@ -1,5 +1,5 @@
+//Percentage Contribution: Sandeep Bindra (100%)
 //Builds and sends out a PingReq message. 
-
 
 #include <stdlib.h>
 #include <stdint.h>
@@ -24,10 +24,8 @@
  * @param clientPtr The client who will be sending out the PingReq message.
  * @param clientID The client ID of sending client. This can be empty (in the form of a clientID with length of 0),
  * or can contain a valid client ID, which will cause the server/GW to check if it has any buffered message for this client.
- * @return An int: Q_NO_ERR for success of a simple ping. Q_PubMsgRead indicates Publish messages were 
- * received by a sleeping client and Q_NoMsg (25) indicates there were no messages for the sleeping client.
- * Otherwise, Q_ERR_Unknown, Q_ERR_Serial, Q_ERR_Socket, Q_ERR_MsgType, Q_ERR_qosResponse, Q_ERR_WrongTopicID, Q_ERR_PubAck,
- * or Q_ERR_Deserial all indicate an error.
+ * @return An int: Q_NO_ERR for success of a simple ping. 
+ * Otherwise, Q_ERR_Unknown, Q_ERR_Serial, and Q_ERR_Socket all indicate an error.
  */
 
 int pingReq(Client_t *clientPtr, MQTTSNString *clientID)
@@ -48,8 +46,7 @@ int pingReq(Client_t *clientPtr, MQTTSNString *clientID)
     //If we are not including a clientID, the buffer will only need to hold two bytes of data.
     if(clientID->lenstring.len == 0){
         bufBytes = 2;
-    }
-    else{
+    } else {
         //Add 1 for the MsgType portion of the message.
         bufBytes = MQTTSNPacket_len(MQTTSNstrlen(*clientID) + 1);
     }
@@ -66,8 +63,7 @@ int pingReq(Client_t *clientPtr, MQTTSNString *clientID)
     //Check if serialization was successful and if it was, assign the serialized length of the message.
     if(returnCode > 0){
         serialLength = (size_t) returnCode;
-    }
-    else{
+    } else {
         returnCode = Q_ERR_Serial;
         goto exit;
     }

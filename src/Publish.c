@@ -1,3 +1,4 @@
+//Percentage Contribution: Sandeep Bindra (30%), Bianca Lavaud (70%)
 //Build and send a Publish message for a client.
 
 #include <stdlib.h>
@@ -20,7 +21,8 @@
  * @param topicID The topic Id that this message will be tied to.
  * @param msgID The ID of the message being sent.
  * @param data The actual data contained within the message.
- * @return An int: Q_NO_ERR (0) indicates no error for building and sending the message. Otherwise, 
+ * @return An int: Q_NO_ERR indicates no error for building and sending the message. Otherwise, Q_ERR_Unknown, Q_ERR_TopicIdType, 
+ * Q_ERR_Serial, and Q_ERR_Socket indicate errors.
  */
 
 int publish(Client_t *clientPtr, MQTTSNFlags *flags, uint16_t topicID, uint16_t msgID, unsigned char *data)
@@ -81,8 +83,7 @@ int publish(Client_t *clientPtr, MQTTSNFlags *flags, uint16_t topicID, uint16_t 
 
     if(returnCode > 0){
         serialLength = (size_t) returnCode;
-    }
-    else{
+    } else {
         returnCode = Q_ERR_Serial;
         goto exit;
     }

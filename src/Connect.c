@@ -1,6 +1,5 @@
+//Percentage Contribution: Sandeep Bindra (100%)
 //Contains a function for building the connect message and sending it out for a client.
-//Also contains a function called MQTTSNStrCreate for creating a MQTTSNString struct containing
-//the specified character string.
 
 #include <stdio.h>
 #include <string.h>
@@ -26,8 +25,7 @@ size_t MQTTSNSerialize_connectLength(MQTTSNPacket_connectData *options); //proto
  * @param clnSession The value of the clean session flag, either a 1 or 0.
  * @return An int: Q_NO_ERR indicates success of sending a message with no will flag set. Q_WillTopReq indicates
  * the connect message was successfully sent and a the server/GW responded with a WillTopicReq message. Otherwise,
- * Q_ERR_Unknown, Q_ERR_Socket, Q_ERR_SocketOpen, Q_ERR_Connect, Q_ERR_WillTopReq, Q_ERR_MsgReturnCode, 
- * Q_ERR_Deserial, or Q_ERR_Connack.
+ * Q_ERR_Unknown, Q_ERR_Socket, Q_ERR_SocketOpen, and Q_ERR_Serial.
  */
 int connect(Client_t *clientPtr, uint16_t timeOut, uint8_t willF, uint8_t clnSession)
 {
@@ -66,7 +64,7 @@ int connect(Client_t *clientPtr, uint16_t timeOut, uint8_t willF, uint8_t clnSes
     if(returnCode > 0){
         serialLength = (size_t) returnCode;
     }  else {
-        returnCode = Q_ERR_Connect;
+        returnCode = Q_ERR_Serial;
         goto exit;
     }
 	

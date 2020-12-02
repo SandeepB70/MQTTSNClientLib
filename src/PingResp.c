@@ -1,9 +1,7 @@
 /**
+ * Percentage Contribution: Sandeep Bindra (100%)
  * Builds and sends out a PingResp message
- * 
- * 
  */
-
 #include <stddef.h>
 #include <sys/types.h>
 
@@ -12,10 +10,14 @@
 #include "MQTTSNConnect.h"
 #include "ErrorCodes.h"
 #include "StackTrace.h"
-
+/**
+ * 
+ * @param clientPtr The client who will be sending out the PingResp message.
+ * @return An int: Q_NO_ERR indicates success. Otherwise, Q_ERR_Deserial and Q_ERR_Socket indicate an error.
+ */ 
 int pingResp(Client_t *clientPtr)
 {
-    int returnCode = Q_NO_ERR;
+    int returnCode = Q_ERR_Unknown;
 
     //Only need a two byte buffer for the pingResp message.
     unsigned char buf[2];

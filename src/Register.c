@@ -1,3 +1,4 @@
+//Percentage Contribution: Sandeep Bindra (20%), Evon Choong (80%)
 //Build and send a Register message for a client.
 
 #include <stdlib.h>
@@ -17,8 +18,7 @@
  * @param clientPtr The client that will be sending out a message.
  * @param msgID Used to identify this particular message and match it with the regack.
  * @param topicname The name of the topic the client is trying to register with the server.
- * @return An int: Q_NO_ERR is a success. Otherwise, Q_ERR_Unknown, Q_ERR_Serial, Q_ERR_Socket, 
- * Q_ERR_Deserial, Q_ERR_Ack, Q_ERR_MsgReturnCode, or Q_ERR_MsgID indicate an error. 
+ * @return An int: Q_NO_ERR is a success. Otherwise, Q_ERR_Unknown, Q_ERR_Serial, or Q_ERR_Socket indicate an error. 
  */
 
 int reg(Client_t *clientPtr, uint16_t msgID, MQTTSNString *topicname)
@@ -54,8 +54,7 @@ int reg(Client_t *clientPtr, uint16_t msgID, MQTTSNString *topicname)
     //Check if serialization of the message was successful, in which case it returns the length of the serialized message.
     if(returnCode > 0){
         serialLength = (size_t) returnCode;
-    }
-    else{
+    } else{
         returnCode = Q_ERR_Serial;
         goto exit;
     }
@@ -67,7 +66,7 @@ int reg(Client_t *clientPtr, uint16_t msgID, MQTTSNString *topicname)
         returnCode = Q_ERR_Socket;
         goto exit;
     }
-    
+
    returnCode = Q_NO_ERR;
 
 exit:
